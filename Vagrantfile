@@ -41,8 +41,8 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_x11 = true
   config.vm.synced_folder ".", "/home/dev/ws"
   # Used when running the live documentation server
-  config.vm.network "forwarded_port", guest: 8001, host: 8001
-  config.vm.network "forwarded_port", guest: 8889, host: 8889
+  config.vm.network "forwarded_port", guest: 8002, host: 8002
+  config.vm.network "forwarded_port", guest: 8887, host: 8887
   if File.exist?("/tmp/.X11-unix")
     config.vm.synced_folder "/tmp/.X11-unix", "/tmp/.X11-unix"
   end
