@@ -1,11 +1,10 @@
 *************
 Laboratorio 1
-
-Andrés Arias Campos - B80661
-Erick Sancho Abarca - B77145
-Gabriel Araya Mora - B80525
-
 *************
+
+* Andrés Arias Campos - B80661
+* Erick Sancho Abarca - B77145
+* Gabriel Araya Mora - B80525
 
 Planeamiento
 ==================
@@ -14,7 +13,7 @@ Requerimientos
 ==================
 
 Requerimientos Funcionales:
-------------
+---------------------------
 
 1.El sistema debe funcionar como una especie de API para controlar los dispositivos de forma remota desde el client y hasta los dispositivos asi como devolver respuesta de los mismos al client de ser necesario.
 
@@ -34,7 +33,7 @@ Requerimientos Funcionales:
 
 
 Requerimientos de desempeño:
-------------
+-----------------------------
 
 1.El sistema debe ser capaz de soportar N clientes controlando dispositivos. 
 
@@ -43,8 +42,8 @@ Requerimientos de desempeño:
 3.La aplicación deberá ser capaz de recibir más comandos del client, sin que necesariamente el dispositivo haya devuelto una respuesta. (Multi hilo)
 
 
-4.Requerimientos del sistema:
-------------
+Requerimientos del sistema:
+---------------------------
 
 1.El sistema debe poder ser utilizado por cualquier ambiente de desarrollo externo, es decir cualquier otra plataforma en cualquier lenguaje debe poder hacer uso de la aplicación.
 
