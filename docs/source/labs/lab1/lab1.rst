@@ -72,33 +72,33 @@ En este caso se debe seleccionar un elemento del sistema para descomponer, debid
 
 
 **Paso 3:** Identify Candidate Architectural Drivers.
-En este paso se identifican y categorizan los requerimientos del elemento. En este caso el `eieManager` este es el componente principal del sistema ya que debe coordinar las comunicaciones con el cliente y con los `eieDevice` ademas gestionar los mensajes broadcast a los dispositivos y sus respuestas, generar las respuestas a los comandos del cliente, entre otros. Por lo tanto podemos clasificar los objetivos de negocio según lo descrito por los stakeholders y segun cómo puede afectar la arquitectura.
+En este paso se identifican y categorizan los requerimientos del elemento. En este caso el `eieManager` este es el componente principal del sistema ya que debe coordinar las comunicaciones con el cliente y con los `eieDevice`, además gestionar los mensajes broadcast a los dispositivos y sus respuestas, generar las respuestas a los comandos del cliente, entre otros. Por lo tanto podemos clasificar requerimientos según lo descrito por los stakeholders y según cómo puede afectar la arquitectura.
 
 
-+------------------------------------------------------------------------------+------------+-----------------+
-| Objetivo de negocio                                                          | SH         | Arch            |
-+==============================================================================+============+=================+
-| | Que el API pueda ser fácilmente consumido por otro equipo de desarrollo    | Alta       |   Baja          |
-| | desarrollo para implementar un cliente en un App móvil con GUI. No se      |            |                 |
-| | puede asumir que este cliente va a utilizar algún lenguaje en específico.  |            |                 |
-+------------------------------------------------------------------------------+------------+-----------------+
-| | Soportar dispositivos heterogéneos, de distintos fabricantes y/o           | Alta       |   Alta          |
-| | características. Nuevos dispositivos deben ser sencillos de agregar y      |            |                 |
-| | esto no debe implicar cambios en el API. Además, ciertos dispositivos y    |            |                 |
-| | casos de uso podrían requerir nuevos protocolos de comunicación.           |            |                 |
-+------------------------------------------------------------------------------+------------+-----------------+
-| | Que el sistema sea capaz de generar una amplia variedad de comandos.       | Alta       |   Media         |
-| | Nuevos comandos deben ser sencillos de agregar y esto no debe implicar     |            |                 |
-| | cambios en el API.                                                         |            |                 |
-+------------------------------------------------------------------------------+------------+-----------------+
-| | Que el sistema tenga un rendimiento y escalabilidad adecuada al operar     | Media      |   Alta          |
-| | con los dispositivos, tal que se soporte el envío de comandos a            |            |                 |
-| | múltiples dispositivos simultáneamente en los casos de `broadcast`.        |            |                 |
-+------------------------------------------------------------------------------+------------+-----------------+
-| | Que el sistema tenga alta disponibilidad, siendo capaz de volver a su      | Media      |   Media         |
-| | operación normal luego de un fallo que genere un cierre del proceso de     |            |                 |
-| | ``eieManager``, recuperando su estado original.                            |            |                 |
-+------------------------------------------------------------------------------+------------+-----------------+
++---------------------------------------------------------------------------+--------+--------+
+| Requerimientos                                                            | SH     | Arch   |
++===========================================================================+========+========+
+|| Que el API pueda ser fácilmente consumido por otro equipo de desarrollo  | Alta   | Baja   |
+|| para implementar un cliente en un App móvil con GUI. No se puede asumir  |        |        |
+|| que este cliente va a utilizar algún lenguaje en específico.             |        |        |
++---------------------------------------------------------------------------+--------+--------+
+|| Soportar dispositivos heterogéneos, de distintos fabricantes y/o         | Alta   |  Alta  |
+|| características. Nuevos dispositivos deben ser sencillos de agregar y    |        |        |
+|| esto no debe implicar cambios en el API. Además, ciertos dispositivos y  |        |        |
+|| casos de uso podrían requerir nuevos protocolos de comunicación.         |        |        |
++---------------------------------------------------------------------------+--------+--------+
+|| Que el sistema sea capaz de generar una amplia variedad de comandos.     |  Alta  |  Media |
+|| Nuevos comandos deben ser sencillos de agregar y esto no debe implicar   |        |        |
+|| cambios en el API.                                                       |        |        |
++---------------------------------------------------------------------------+--------+--------+
+|| Que el sistema tenga un rendimiento y escalabilidad adecuada al operar   |  Media |  Alta  |
+|| con los dispositivos, tal que se soporte el envío de comandos a          |        |        |
+|| múltiples dispositivos simultáneamente en los casos de `broadcast`.      |        |        |
++---------------------------------------------------------------------------+--------+--------+
+|| Que el sistema tenga alta disponibilidad, siendo capaz de volver a su    |  Media |  Alta  |
+|| operación normal luego de un fallo que genere un cierre del proceso de   |        |        |
+|| ``eieManager``, recuperando su estado original.                          |        |        |
++---------------------------------------------------------------------------+--------+--------+
 
 .. note::
    Donde `SH` significa StakeHolder, y `Arch` significa Arquitectura.
@@ -108,16 +108,17 @@ En el prinmer caso se selecciona una prioridad **Baja** de Arquitectura debido q
 
 En el segundo caso se selecciona una prioridad de **Alta** en la arquitectura, esto debido a que el **eieManager** sea compatible con multiples dispositivos, sin importar el protocolo de comunicación, es muy importante e impacta directamente en la arquitectura del elemento y del sistema. Ya que a diferencia del punto anterior, la conexion con los dispositivos, la comunicación con los dispositivos puede cambiar entre muchos de ellos. En este caso se puede pensar en las implicaciones que puede tener, dar soporte a diferentes protocolos, sin poder cambiar las funcionalidades de la API. 
 
-En el tercer objetivo, se define una prioridad **Media**, en la arquitectura, esto debido a que la arquitectura debe tener la capacidad de generalizar los comandos para poder tener una configuración que permita una integracion sencilla de nuevos comandos. Sin embargo el impacto en la arquitectura no es demasiado alta ya que los comandos al ser generalizados, tienen alta facilidad de integración.
+En el tercer requerimiento, se define una prioridad **Media** en la arquitectura, esto debido a que la arquitectura debe tener la capacidad de generalizar los comandos para poder tener una configuración que permita una integracion sencilla de nuevos comandos. Sin embargo el impacto en la arquitectura no es demasiado alta ya que los comandos al ser generalizados, tienen alta facilidad de integración.
 
-En el cuarto objetivo, se define una prioridad **Alta**, en la arquitectura. La escalanbilidad es un requerimiento importante que impacta la arquitectura del sistema, ya que esta ligada con el rendimiento del sistema. Por lo que una mala arquitectura de software afectaría el rendimiento del sistema.
+En el cuarto requerimiento, se define una prioridad **Alta** en la arquitectura. La escalanbilidad es un requerimiento importante que impacta la arquitectura del sistema, ya que esta ligada con el rendimiento del sistema. Por lo que una mala arquitectura de software afectaría el rendimiento del sistema.
 
-En el quinto objetivo, se define una prioridad **Media**, en la arquitectura, 
+En el quinto requerimiento, se define una prioridad **Alta** en la arquitectura, debido que la disponibilidad, aún cuando se den problemas en el `eiemanager`, impacta en gran manera la forma en la que se determina la arquitectura, ya que este tipo de funcionalidad requiere de algún patrón de diseño, lo cual afecta la arquitecctura directamente.
+
 
 
 **Paso 4:** Choose a Design Concept That Satisfies the Architectural Drivers.
 
-En este paso se realiza el planteamiento de conceptos de diseño a partir de los objetivos planteados y de los 
+En este paso se realiza el planteamiento de conceptos de diseño a partir de los objetivos planteados y de los requerimientos de funcionalidad del elemento ``eieManager``.
 
 
 
@@ -126,6 +127,48 @@ En este paso se realiza el planteamiento de conceptos de diseño a partir de los
 =============
 
 **Paso 3:** Identify Candidate Architectural Drivers.
+
+En este caso identifican y categorizan los requerimientos que aplican al módulo `eieDevice`, el cual recibe los comandos desde el `eieManager`, los procesa y genera el resultado, que posteriormente devuelve al `eieManager`. Por lo tanto podemos clasificar requerimientos según lo descrito por los stakeholders y según cómo puede afectar la arquitectura.
+
++----------------------------------------------------------------------+-------+-------+
+| Requerimientos                                                       | SH    | Arch  |
++======================================================================+=======+=======+
+|| El dispositivo debe poder procesar múltiples comandos, aunque estos | Alta  | Alto  |
+|| lleguen sin haber generado la respuesta del comando previo.         |       |       |
+|| Manteniendo una cola de comandos.                                   |       |       |
++----------------------------------------------------------------------+-------+-------+
+|| El Dispositivo debe ser capaz de soportar cualquier distribución de | Alta  | Bajo  |
+|| Linux.                                                              |       |       |
++----------------------------------------------------------------------+-------+-------+
+|| Soportar diferentes protocolos de comunicación que dependen del     | Media | Medio |
+|| dispositivo en el cual se esta ejecutando el `eiedevice`.           |       |       |
++----------------------------------------------------------------------+-------+-------+
+
+En el primer requerimiento se define un impacto `Alto`, esto se debe a que la funcionalidad mencionada requiere una arquitectura dirigida a dicho problema de diseño. Ya que podemos decir que se requiere algún nivel de concurrencia, además de emplear colas, y otros mecanismos para evitar la pérdidad de comandos en situaciones de alta demanda de solicitudes de ejecución.
+
+En el segundo caso se determina un impacto `Bajo`, esto es porque la compatibilidad con un sistema operativo no depende de la arquitectura, si no del lenguaje en que se implemente el código.
+
+En el tercer caso, se determino un impacto `Medio`, esto es porque la compatibilidad con diferentes protocolos de comunicación, es una funcionalidad de una pequeña parte del sistema, la cual únicamente se encarga de las comunicaciones, esto lo podemos definir como una abstracción del bloque de comunicaciones.
+
+
+**Paso 4:** Choose a Design Concept That Satisfies the Architectural Drivers.
+
+En este caso se plantean los conceptos de diseño que satisfacen los requerimientos planteados, para el elemento. El ``eieDevice`` es el software que se encuentra dentro de cada dispositivo controlado por el ``eieManager``, esto es de gran importancia, ya que le software no es distinto para cada dispositivo, sino que este debe ser compatible con cada uno de ellos. 
+
+
+
+Ahora podemos plantear los problemas de diseño, encontrados para este sistema.
+#. Procesar comandos de control y de ejecución.
+#. Debe tener la capacidad de recibir múltiples comandos sin aún haber procesado los comandos recibidos anteriormente. 
+#. Debe soportar multiples protocolos de comunicación.
+
+A partir de los problemas de diseño planteados podemos determinar ciertos patrones de diseño que pueden solucionar estos problemas de diseño.
+
+#. Para el primer caso
+
+
+
+
 
 Patrones de diseño
 ******************

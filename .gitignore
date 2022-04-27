@@ -55,3 +55,4 @@ dkms.conf
 .vagrant
 .Trash*
 .ipynb_checkpoints/
+.vscode/
