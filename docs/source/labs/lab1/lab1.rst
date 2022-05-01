@@ -56,7 +56,7 @@ Version 2.0. Los pasos descritos en el paper anterior son los siguientes:
 #. Repeat steps 2 through 7 for the Next Element of the System You Wish to Decompose
 
 
-Para este caso el proceso de aplicar ADD se debe realizar en dos compoenntes ya establecidos los cuales son **eieManager** y **eieDevice**, esto son tomados del primer boceto elaborado del sistema. 
+Para este caso el proceso de aplicar ADD se debe realizar en dos componentes ya establecidos los cuales son **eieManager** y **eieDevice**, esto son tomados del primer boceto elaborado del sistema. 
 
 **Paso 1.** Confirm There Is Sufficient Requirements Information.
 
@@ -65,7 +65,7 @@ El primer paso es el de verificar que se cuente con los requerimientos suficient
 
 **Paso 2.** Choose an Element of the System to Decompose.
 
-En este caso se debe seleccionar un elemento del sistema para descomponer, debido a que le sistema se componen de dos elementos principales llamandos en los bocetos iniciales como **eieManager** y **eieDevice**. Primero se realiza el análisis a partir del paso 2 de la metodología de ADD. Comenzando por el módulo de **eieManager**.
+En este caso se debe seleccionar un elemento del sistema para descomponer, debido a que el sistema se compone de dos elementos principales llamados en los bocetos iniciales como **eieManager** y **eieDevice**. Primero se realiza el análisis a partir del paso 2 de la metodología de ADD. Comenzando por el módulo de **eieManager**.
 
 **eieManager**
 ==============
@@ -88,8 +88,7 @@ En este paso se identifican y categorizan los requerimientos del elemento. En es
 || casos de uso podrían requerir nuevos protocolos de comunicación.         |        |        |
 +---------------------------------------------------------------------------+--------+--------+
 || Que el sistema sea capaz de generar una amplia variedad de comandos.     |  Alta  |  Media |
-|| Nuevos comandos deben ser sencillos de agregar y esto no debe implicar   |        |        |
-|| cambios en el API.                                                       |        |        |
+|| Nuevos comandos deben ser sencillos de agregar.                          |        |        |
 +---------------------------------------------------------------------------+--------+--------+
 || Que el sistema tenga un rendimiento y escalabilidad adecuada al operar   |  Media |  Alta  |
 || con los dispositivos, tal que se soporte el envío de comandos a          |        |        |
@@ -104,15 +103,15 @@ En este paso se identifican y categorizan los requerimientos del elemento. En es
    Donde `SH` significa StakeHolder, y `Arch` significa Arquitectura.
 
 
-En el prinmer caso se selecciona una prioridad **Baja** de Arquitectura debido que existen multiples protocolos que son compatibles con todos o casi todos los lenguajes, entre los que podemos mecionar TCP, UDP, entre otros. Otro motivo es que mayoritariamente las API funcionan por serialización de datos empleando métodos como JSON. Debido a esto es que no tiene baja relevancia en la arquitectura que se implemente dentro del **eieManager**. 
+En el primer caso se selecciona una prioridad **Baja** de Arquitectura debido a que existen múltiples protocolos que son compatibles con todos o casi todos los lenguajes, entre los que podemos mencionar TCP, UDP, entre otros. Otro motivo es que mayoritariamente las API funcionan por serialización de datos empleando métodos como JSON. Debido a esto es que no tiene baja relevancia en la arquitectura que se implemente dentro del **eieManager**. 
 
-En el segundo caso se selecciona una prioridad de **Alta** en la arquitectura, esto debido a que el **eieManager** sea compatible con multiples dispositivos, sin importar el protocolo de comunicación, es muy importante e impacta directamente en la arquitectura del elemento y del sistema. Ya que a diferencia del punto anterior, la conexion con los dispositivos, la comunicación con los dispositivos puede cambiar entre muchos de ellos. En este caso se puede pensar en las implicaciones que puede tener, dar soporte a diferentes protocolos, sin poder cambiar las funcionalidades de la API. 
+En el segundo caso se selecciona una prioridad de **Alta** en la arquitectura, esto debido a que el **eieManager** sea compatible con múltiples dispositivos, sin importar el protocolo de comunicación, es muy importante e impacta directamente en la arquitectura del elemento y del sistema. Ya que a diferencia del punto anterior, la conexión con los dispositivos, la comunicación con los dispositivos puede cambiar entre muchos de ellos. En este caso se puede pensar en las implicaciones que puede tener, dar soporte a diferentes protocolos, sin poder cambiar las funcionalidades de la API. 
 
-En el tercer requerimiento, se define una prioridad **Media** en la arquitectura, esto debido a que la arquitectura debe tener la capacidad de generalizar los comandos para poder tener una configuración que permita una integracion sencilla de nuevos comandos. Sin embargo el impacto en la arquitectura no es demasiado alta ya que los comandos al ser generalizados, tienen alta facilidad de integración.
+En el tercer requerimiento, se define una prioridad **Media** en la arquitectura, esto debido a que la arquitectura debe tener la capacidad de generalizar los comandos para poder tener una configuración que permita una integración sencilla de nuevos comandos. Sin embargo el impacto en la arquitectura no es demasiado alto ya que los comandos al ser generalizados, tienen alta facilidad de integración.
 
-En el cuarto requerimiento, se define una prioridad **Alta** en la arquitectura. La escalanbilidad es un requerimiento importante que impacta la arquitectura del sistema, ya que esta ligada con el rendimiento del sistema. Por lo que una mala arquitectura de software afectaría el rendimiento del sistema.
+En el cuarto requerimiento, se define una prioridad **Alta** en la arquitectura. La escalabilidad es un requerimiento importante que impacta la arquitectura del sistema, ya que está ligada con el rendimiento del sistema. Por lo que una mala arquitectura de software afectaría el rendimiento del sistema.
 
-En el quinto requerimiento, se define una prioridad **Alta** en la arquitectura, debido que la disponibilidad, aún cuando se den problemas en el `eiemanager`, impacta en gran manera la forma en la que se determina la arquitectura, ya que este tipo de funcionalidad requiere de algún patrón de diseño, lo cual afecta la arquitecctura directamente.
+En el quinto requerimiento, se define una prioridad **Alta** en la arquitectura, debido a que la disponibilidad, aún cuando se den problemas en el `eiemanager`, impacta en gran manera la forma en la que se determina la arquitectura, ya que este tipo de funcionalidad requiere de algún patrón de diseño, lo cual afecta directamente la arquitectura.
 
 
 
@@ -123,12 +122,18 @@ En este paso se realiza el planteamiento de conceptos de diseño a partir de los
 
 
 
+**Paso 5:** Instantiate Architectural Elements and Allocate Responsibilities
+
+* APIserver:
+* CommandRegistry
+
+
 **eieDevice**
 =============
 
 **Paso 3:** Identify Candidate Architectural Drivers.
 
-En este caso identifican y categorizan los requerimientos que aplican al módulo `eieDevice`, el cual recibe los comandos desde el `eieManager`, los procesa y genera el resultado, que posteriormente devuelve al `eieManager`. Por lo tanto podemos clasificar requerimientos según lo descrito por los stakeholders y según cómo puede afectar la arquitectura.
+En este caso se identifican y categorizan los requerimientos que aplican al módulo `eieDevice`, el cual recibe los comandos desde el `eieManager`, los procesa y genera el resultado, que posteriormente devuelve al `eieManager`. Por lo tanto podemos clasificar requerimientos según lo descrito por los stakeholders y según cómo puede afectar la arquitectura.
 
 +----------------------------------------------------------------------+-------+-------+
 | Requerimientos                                                       | SH    | Arch  |
@@ -141,30 +146,71 @@ En este caso identifican y categorizan los requerimientos que aplican al módulo
 || Linux.                                                              |       |       |
 +----------------------------------------------------------------------+-------+-------+
 || Soportar diferentes protocolos de comunicación que dependen del     | Media | Medio |
-|| dispositivo en el cual se esta ejecutando el `eiedevice`.           |       |       |
+|| dispositivo en el cual se está ejecutando el `eiedevice`.           |       |       |
++----------------------------------------------------------------------+-------+-------+
+|| Nuevos comandos deben ser sencillos de agregar.                     | Alta  | Alta  |
 +----------------------------------------------------------------------+-------+-------+
 
-En el primer requerimiento se define un impacto `Alto`, esto se debe a que la funcionalidad mencionada requiere una arquitectura dirigida a dicho problema de diseño. Ya que podemos decir que se requiere algún nivel de concurrencia, además de emplear colas, y otros mecanismos para evitar la pérdidad de comandos en situaciones de alta demanda de solicitudes de ejecución.
+En el primer requerimiento se define un impacto `Alto`, esto se debe a que la funcionalidad mencionada requiere una arquitectura dirigida a dicho problema de diseño. Ya que podemos decir que se requiere algún nivel de concurrencia, además de emplear colas, y otros mecanismos para evitar la pérdida de comandos en situaciones de alta demanda de solicitudes de ejecución.
 
 En el segundo caso se determina un impacto `Bajo`, esto es porque la compatibilidad con un sistema operativo no depende de la arquitectura, si no del lenguaje en que se implemente el código.
 
-En el tercer caso, se determino un impacto `Medio`, esto es porque la compatibilidad con diferentes protocolos de comunicación, es una funcionalidad de una pequeña parte del sistema, la cual únicamente se encarga de las comunicaciones, esto lo podemos definir como una abstracción del bloque de comunicaciones.
+En el tercer caso, se determinó un impacto `Medio`, esto es porque la compatibilidad con diferentes protocolos de comunicación, es una funcionalidad de una pequeña parte del sistema, la cual únicamente se encarga de las comunicaciones, esto lo podemos definir como una abstracción del bloque de comunicaciones.
+
+En el último requerimiento se define un impacto `Alto`, debido a que cada comando es al final un método, entonces el poder integrar un método nuevo sin mucha dificultad tiene un gran impacto en la arquitectura del sistema.
+
+Analizando estos requerimientos podemos plantear el siguiente atributos de calidad:
+
+* Modificable: Esto se deriva de la necesidad de tener facilidad de incluir nuevas funcionalidades posteriormente. Esto debido a la necesidad de soportar diferentes protocolos en la capa de transporte.
+
 
 
 **Paso 4:** Choose a Design Concept That Satisfies the Architectural Drivers.
 
-En este caso se plantean los conceptos de diseño que satisfacen los requerimientos planteados, para el elemento. El ``eieDevice`` es el software que se encuentra dentro de cada dispositivo controlado por el ``eieManager``, esto es de gran importancia, ya que le software no es distinto para cada dispositivo, sino que este debe ser compatible con cada uno de ellos. 
+En este caso se plantean los conceptos de diseño que satisfacen los requerimientos planteados, para el elemento. El ``eieDevice`` es el software que se encuentra dentro de cada dispositivo controlado por el ``eieManager``, esto es de gran importancia, ya que el software no es distinto para cada dispositivo, sino que este debe ser compatible con cada uno de ellos. Entonces analizamos los principales requerimientos del elemento:
 
 
 
-Ahora podemos plantear los problemas de diseño, encontrados para este sistema.
-#. Procesar comandos de control y de ejecución.
-#. Debe tener la capacidad de recibir múltiples comandos sin aún haber procesado los comandos recibidos anteriormente. 
-#. Debe soportar multiples protocolos de comunicación.
+* El primer requerimiento del sistema es la necesidad de ejecutar comandos de estado y/o comandos de ejecución. Este requerimiento deriva en el problema de cómo se puede recibir un comando de un agente externo, y ejecutarlo localmente, para posteriormente devolver el resultado que este genere. Al analizar estos requerimientos, podemos plantear el patrón de diseño **Comando**. Este patrón de diseño se puede emplear cuando se tiene que ejecutar comandos que pueden provenir, tanto localmente, como desde el exterior. Además este presenta la ventaja de poder agregar nuevos comandos de forma sencilla, ya que se basa en el uso de la herencia de una clase base, que puede ser una clase **comando**. Además que se pueden definir colas de ejecución, por lo tanto si entran más comandos de los que se pueden ejecutar estos entran en una cola y eventualmente se ejecutarán.
 
-A partir de los problemas de diseño planteados podemos determinar ciertos patrones de diseño que pueden solucionar estos problemas de diseño.
 
-#. Para el primer caso
+A partir del análisis anterior se definen dos bloques, el primero es el bloque **Comand**, este bloque implementa las funcionalidades de comando, como puede ser la interfaz de la cual se derivan de los comandos, ademas de implementar la funcionalidad de los comandos. El segundo bloque es el **ComandManager**, en este bloque se implementa el registro de los comandos soportados por el sistema, además es donde se coordina la ejecución de los mismos. Entre las funciones principales está la de tomar la entrada del TansportServer y registrarla en la cola de comandos. 
+
+
+
+* El siguiente requerimiento es la capacidad de poder soportar diferentes protocolos de comunicación. Para este caso se puede emplear un patrón de diseño como el Template (o plantilla). Este patrón de diseño propone una estructura base o esqueleto, el cual se pueden sobreescribir los métodos, con lo cual se obtiene una funcionalidad diferente, sin alterar su estructura básica. Este tipo de funcionalidades se pueden ejemplificar como herencia de clases y polimorfismo. Otro posible patrón de diseño que aplica a este caso es el de estrategia, el cual propone una estructura base que ofrece servicios, los cuales dependen de quién solicite estos servicios. Entonces cual es el patrón que más se adapta para este caso:
+
+
+  * **Template**: Ese patrón permite añadir funcionalidades derivadas del mismo esqueleto `Protocolo`. Además es fácil de agregar, ya que se basa en el polimorfismo. Sin embargo, debido a que se basa únicamente en polimorfismo, las nuevas funcionalidades deben realizarse sobre una base fija de métodos, por lo que es necesario ser claros en la cantidad de métodos que se pueden llegar a requerir para implementar todos los protocolos que se quiere dar soporte.
+  * **Strategy**: Este patrón de diseño se basa en herencia desde una interfaz por ende los nuevos protocolos son muy fáciles de agregar. Además que la manera en que se indica que clase se quiere emplear en la ejecución de un comando, nos da la ventaja de emplear una estructura de configuración. Ya que se puede emplear un identificador del tipo de protocolo y el contexto en donde se ejecuta no requiere conocer la clase, únicamente su identificador, esto es una propiedad de intercambiabilidad entre los protocolos. Esto es diferente a lo que sucede en el caso de Template ya que en ese caso, el contexto sí requiere conocer la clase que se quiere emplear.
+
+
+Entonces a partir del análisis anterior podemos plantear un bloque llamado **TransportServer**, en este bloque de función se implementan las funcionalidades de comunicación con el `eieManager`. La implementación de este bloque se basa en el patrón de diseño strategy ya que este permite una modificabilidad alta, además de una integración con diferentes protocolos bastante alta. Un punto importante por el cual se emplea este patrón de diseño es que el contexto no se quiere conocer la implementación de la funcionalidad deseada únicamente un identificador del mismo. Por lo tanto en adición se define un bloque de configuración **ConfigDev** el cual implementa estas configuraciones para su fácil adaptabilidad entre diferentes dispositivos. 
+
+
+**Paso 5:** Instantiate Architectural Elements and Allocate Responsibilities
+
+
+* ``Command``: De este módulo se derivan los comandos soportados por el sistema, es decir, cada comando se define por herencia a partir de la interfaz implementada en el bloque comando. Este recibe el identificador del comando y la lista de argumentos requeridos por el sistema. 
+* ``CommandManager``: En este módulo se implementa el invocador de los comandos, el cual es el encargado de registrar los comandos, e invocar su ejecución. Además se encarga de implementar una cola la cual se llena con las requests entrantes desde el ``TransportServer``.
+* ``ConfigDev``(opcional): En este módulo se definen las configuraciones necesarias para el sistema. Las cuales son determinadas para cada uno de los dispositivos ``eieDevice``.
+* ``TransportServer``: En este se implementa la lógica requerida para poder responder a request provenientes del ``eieManager``. Como se mencionó en la etapa anterior, este bloque se basa en la metodología Strategy, por lo tanto en este módulo se define la lógica del contexto, el cual se define como un **listener**, debido a que es un sistema de tipo servidor. Además es el encargado de definir el tipo de protocolo, a partir de la configuración determinada en el módulo ``ConfigDev``. 
+* ``Protocolo``: En este módulo se implementa la interfaz base del protocolo, así como los protocolos soportados.
+
+
+**Paso 6:** Define Interfaces for Instantiated Elements.
+
+Los datos en el sistema viajan en cascada, por ejemplo cuando un paquete entra (``Protocolo``) llega al ``TransportServer``, de ahí pasa al ``CommandManager`` donde entra a la cola, cuando sale de la cola este se envía al ``command``, el cual ejecuta la función y devuelve el resultado al ``CommandManager`` el cual a su vez devuelve el resultado al ``TransportServer``, para ser enviado al ``eieManager`` de vuelta. El método de conexión entre los módulos es por referencia, y por instancia. Donde el contenido de los paquetes que se transportan son el comando (id del comando), y argumentos. En la comunicación de regreso al cliente, el payload de la respuesta es el resultado del comando ejecutado.
+
+Debido a que el sistema es un servidor este debe tener una rutina de inicialización la cual en este caso es la definir el tamaño máximo de la cola de comandos, así como la de iniciar el servidor de comunicaciones, en la cual se ejecuta configura el protocolo que se requiere. Todo esto antes de enviar un mensaje de estatus al ``eieManager``, el cual notifica que el dispositivo se encuentra operando con funcionalidad.
+
+
+**Paso 7:** Verify and Refine Requirements and Make Them Constraints for Instantiated Elements.
+
+Al emplear el patrón de diseño **command** Se garantiza la funcionalidad requerida en el primer requerimiento del sistema y el cuarto requerimiento, ya que agregar nuevos comandos se vuelve muy sencillo, y es posible soportar múltiples comandos. Además entre las funciones del ``commandManager`` se encuentra la de implementar una cola de comandos, lo cual cumple con los requerimientos solicitados. Al emplear la metodología de strategy nos garantizamos el cumplimiento del tercer requerimiento solicitado para el ``eieDevice``. Además nos garantizamos con el cumplimiento del atributo de calidad de modificabilidad ya que los protocolos soportados son mantenibles. 
+
+En el caso del segundo requerimiento éste no afecta la arquitectura del sistema por lo tanto no tiene repercusión en las decisiones de diseño tomadas.
+
 
 
 
@@ -176,5 +222,6 @@ Patrones de diseño
 
 Diagramas UML
 *************
+
 
 
