@@ -9,10 +9,6 @@ Laboratorio 1
 Planeamiento
 ************
 
-.. introduccion\n
-
-#.
-
 Requerimientos
 **************
 
@@ -258,6 +254,36 @@ En el caso del segundo requerimiento éste no afecta la arquitectura del sistema
 Patrones de diseño
 ******************
 
+Proxy:
+======
+
+Como se sabe de la definición de este patrón de diseño, un proxy es una clase funcionando como una interfaz intermedia a algo más, a cualquier cosa.
+
+Esta es exactamente la situación que se presenta en el enunciado laboratorio, en la que el ``eieManager`` va a funcionar como una interfaz intermedia entre el ``eieclient`` y los devices a los que el client quiere alcanzar.
+
+La interfaz o la clase intermedia del ``eieManager`` tiene funcionalidad agregada y no solo hace forwarding de la data, pero para este momento del diseño, funciona básicamente como una caja negra la cual recibe entradas y da salidas según los requerimientos funcionales. 
+
+Relación del patrón con el diseño:
+----------------------------------
+
+Siendo en este caso el ``TransportClient`` el proxy o la caja intermedia entre el client y los devices. Además de que se puede relacionar con el patrón de diseño ``Adapter`` el cual ayuda a implementar de una manera mas directa y sencilla los requerimientos funcionales y compatibilidad de diferentes protocolos. 
+
+El proxy en la sana teoría solo  debería de hacer forwarding de la data, y usando una "caja" extra con el dicho ``Adapter`` se puede modificar esa data para cumplir los requerimientos.
+
+Command:
+========
+
+``Command`` es uno de los muchos patrones de diseño de comportamiento, el cual abstrae una solicitud, en un objeto totalmente independiente, el cual contiene toda la información sobre la misma solicitud.
+
+Esta abstracción permite parametrizar los métodos con diferentes solicitudes o comandos en el caso del sistema en cuestión, además de retrasar o poner en cola la ejecución de una solicitud y soportar operaciones que no se pueden realizar.
+
+* Encapsular la información requerida para ejecutar comandos en dispositivos específicos:
+
+La clase ``command`` va a tener como atributo un ``deviceID`` con el fin de identificar al dispositivo al que se le quiere hablar, además va a tener otro atributo el cual encapsule el comando que se le va a mandar al device. Si al llegar al device correspondiente el mismo es capaz de ejecutarlo, lo ejecuta, sino crea un mensaje de error. 
+
+* Ejecutar los comandos y esperar la respuesta correspondiente:
+
+En este caso se hace uso de la clase llamada ``commandInvoker``, la cual se encarga de recibir los comandos, encolarlos, y enviarlos a ejecución.
 
 Diagramas UML
 *************
