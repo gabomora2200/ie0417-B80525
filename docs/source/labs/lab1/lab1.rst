@@ -9,6 +9,20 @@ Laboratorio 1
 Planeamiento
 ************
 
+Para el presente proyecto, se utiliza el framework de desarrollo y manejo de proyectos SCRUM. Por lo que el primer paso a seguir es separar el problema en releases o entregas estratégicas y coherentes de tal forma que al cumplir uno de estos milestones, el mismo sirva para desarrollar la entrega posterior.
+
+Cada release o sprint, se hace pensando en desarrollar un componente completamente funcional del software o sistema en cuestión.
+
+Releases:
+=========
+
+#. Completar un API que sea funcional y que cumpla con los requerimientos funcionales del mismo. 
+#. Completar todos los "managers" y sus funcionalidades. (``Manager``, ``GroupManager``, ``DeviceManager``, ``DatabaseHandler``)
+#. Completar la capa de comandos. (``CommandInvoker``, ``CommandRegistry``, ``CommandInfo``) 
+#. Completar capa transporte del ``eieManager``. (``TransportClient``, ``RPCClient``)
+#. Completar capa transporte del ``eieDevice``. (``TransportServer``, ``Protocol``)
+#. Completar la capa de commando. (``CommandManager``, ``Command``)
+
 Requerimientos
 **************
 
