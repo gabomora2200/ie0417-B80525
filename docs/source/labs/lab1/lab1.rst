@@ -117,15 +117,59 @@ En el quinto requerimiento, se define una prioridad **Alta** en la arquitectura,
 
 **Paso 4:** Choose a Design Concept That Satisfies the Architectural Drivers.
 
-En este paso se realiza el planteamiento de conceptos de diseño a partir de los objetivos planteados y de los requerimientos de funcionalidad del elemento ``eieManager``.
+En este paso se realiza el planteamiento de conceptos de diseño a partir de los objetivos planteados y de los requerimientos de funcionalidad del elemento ``eieManager``. Para ello se analizan los requerimientos del sistema, para cada uno se plantean posibles soluciones que puedan cumplir con dicho requerimiento.
+
+* La API debe ser sencilla de usar, y no debe tener cambios cuando se agregan nuevos comandos, y/o dispositivos. Para ello se debe definir un método sencillo de comandos los cuales se deben permitir indicar el comando que se desea usar, así como el o los dispositivos en donde se requiere ejecutar el comando. Además de la lista de argumentos necesaria para el comando. Entonces los comandos necesarios de implementar en el API son: ejecutar comando, listar dispositivos, listar comandos con sus respectivos dispositivos habilitados. Y un comando de estatus del sistema. Las respuestas de cada comando debe tener una estructura definida. por ejemplo para ejecutar un comando, la respuesta es un diccionario con el id del dispositivo como llave y el contenido es el resultado del comando. Este formato permite devolver la respuesta de múltiples dispositivos en una sola respuesta. En el caso de los demás comandos estos deben contener listas de resultados con el mismo formato, en el caso de cada comando. Por último en el caso del comando de status este se debe parecer a un comando de PING el cual notifica el estado del ``eieManager``.
+
+Entonces para este se plantea un bloque llamado ``APIServer`` el cual se debe encargar de brindar el servicio del API a los clientes. Cada comando que ingresa lo convierte en un formato entendible para el sistema. Este formato (paquete) se basa en un bloque el cual define la estructura de un comando, el cual se implementa en un bloque llamado ``CommandInfo``. En este se definen las características principales del comando, como lista de argumentos, dispositivo objetivo, y id del comando. En el caso de un comando de tipo *Broadcast*, el contenido del dispositivo objetivo se representa como una lista, donde cada elemento es un dispositivo destino.
+
+* Transportar los comandos desde la API hasta el o los dispositivos, esto se puede solucionar empleando el patrón de diseño de tipo cadena de responsabilidades, este patrón de diseño propone una arquitectura de tipo árbol, donde cada nodo se define como un handler que opera sobre el request hasta que este alcance su destino (``eieDevice``). 
+
+Entonces empleando el patrón de diseño cadena de responsabilidades, podemos definir dos ramas principales, estas son comandos de tipo broadcast (o también multicast) y de tipo unicast. Por lo tanto se requiere un primer handler que identifica cual de las dos ramas debe tomar el request. Este bloque se denomina ``Manager``, es el primer nodo del árbol de ejecución del ``eieManager``. A partir de este bloque se define dos ramas la primera es un bloque que controle los sistemas cuando se ejecuta un comando de tipo broadcast, el cual se denomina ``GroupManager``. El segundo es un bloque que implementa la lógica de control para administrar el ciclo de vida de cada dispositivo, este es el ``DeviceManager``.
+
+* Soportar dispositivos heterogéneos, para ello se implementa un ``DeviceManager``, este bloque se encarga de administrar el ciclo de vida de los dispositivos disponibles, entre sus funciones está la de generar una lista de los dispositivos, donde se registra los estados de cada uno, por ejemplo cuando entra un comando a un dispositivo este almacena el estado de este comando en el dispositivo. 
+
+En este caso el ``DeviceManager`` emplea un módulo base llamado ``Device``, este módulo implementa los datos de control, los cuales el ``DeviceManager``, usa para gestionar el ciclo de vida de cada dispositivo.
+
+* Se requiere que el sistema sea capaz de ejecutar múltiples comandos, además de poder agregar nuevos comandos de forma sencilla, sin implicar cambios importantes en el mismo. esto se resuelve empleando el patrón de diseño **command**, sin embargo, en este caso la ejecución del mismo se realiza de forma remota, ya que la ejecución se ejecutará en el ``eieDevice``. 
+
+Para poder cumplir con este requisito se emplea un ``CommandInvoker``, el cual se encarga de controlar la ejecución de los comandos en el dispositivo destino, para ello hace uso de otro bloque llamado ``Transportclient``, este es el encargado de enviar el request al dispositivo. Estos bloques son los últimos de la cadena de responsabilidades. Estos son controlados por el ``DeviceManager``.
+
+* Para poder establecer conexión con múltiples dispositivos, se puede emplear el patrón de diseño Proxy, sin embargo, algunos dispositivos pueden requieren protocolos de comunicación por lo tanto se puede emplear el patrón de diseño Adapter, el cual proporciona los métodos de conversión de las información en el protocolo específico para cada uno de los dispositivos. Entonces para este caso se define una solución que mezcla las propiedades del patrón de diseño Proxy con las propiedades del patrón de diseño de tipo Adapter. Esto se implementa dentro del módulo llamado ``Transportclient``. De este módulo se derivan otro módulo como el RPCClient el cual implementa la interfaz de conexión entre el **eieManager** y el **eieDevice**. 
 
 
-
+* Para poder recuperar el sistema luego de una caída del ``eieManager``, se establece un módulo ``DatabaseHandler``, el cual se encarga de controlar la base de datos empleada en módulos como por ejemplo el ``DeviceManager``, o el ``GroupManager``, ya que a partir de estos datos lo módulos son capaces de regresar al estado antes de la falla en el sistema. Además es importante considerar las configuraciones iniciales del sistema, como por ejemplo los comandos soportados y los dispositivos disponibles. 
 
 **Paso 5:** Instantiate Architectural Elements and Allocate Responsibilities
 
-* APIserver:
-* CommandRegistry
+* ``APIserver``: Este es el bloque en el cual se implementa el API, este tiene dos funciones: escuchar comandos que ingresan y enviar respuestas de los comandos al cliente específico. Por lo tanto se puede separar dos funciones principales, la primera es la poder recibir requests desde los clientes, etiquetando cada uno de ellos con el id del cliente que envía el request, esto con el objetivo de poder responder con el resultado de la operación solicitada. La segunda función es la de convertir el comando de ingreso en el paquete que el sistema puede procesar.
+* ``CommandInfo``: Este es un bloque que define la estructura básica del comando de entrada, en este se definen los campos requeridos por el sistema.
+* ``CommandRegistry``: Este es una memoria, la cual funciona como un registro de los comandos válidos por cada dispositivo, El funcionamiento se basa en el id de cada dispositivo y el id de cada comando, entonces en un diccionario se registra como llave el id de cada dispositivo y el contenido es una lista con los id de los comandos soportados. Además implementa los métodos requeridos para registrar nuevos comandos soportados por cada dispositivo así como el registro de nuevos dispositivos.
+* ``DeviceManager``: Este módulo se encarga del control de los devices, establece tablas de comandos pendientes para cada dispositivo, llevando el control de cada uno. Además es el encargado de implementar los mecanismos de control como por ejemplo los timeouts, los cuales definen el tiempo máximo que el ``DeviceManager``, puede esperar una respuesta del dispositivo. 
+* ``GroupManager``: Este bloque implementa la lógica de control de los mensajes de tipo Broadcast, en este se implementa la tabla de control de los comandos recibidos, además se encarga de unir todas las respuestas de los los dispositivos, en una sola respuesta para ser enviada al ``APIServer`` para devolverse al client. 
+* ``CommandInvoker``: En este módulo se implementa la lógica de verificación del comando, con lo cual se verifica que el dispositivo soporte el comando solicitado. Además se encarga de iniciar la transmisión con el dispositivo. 
+* ``TransportClient``: En este módulo se implementa el proxy de comunicaciones, encargado de determinar el tipo de protocolo que aplica dependiendo del dispositivo destino. Además ejecuta el cliente que es el que se conecta al dispositivo. 
+* ``RPCClient``: En este módulo se implementa el protocolo de comunicación.
+* ``DatabaseHandler``: este bloque es el encargado de implementar los métodos necesarios para que los demás módulos tengan acceso a la base de datos, además de implementar los métodos de control en caso se produzcan errores en el eieManager. De igual forma gestiona los datos de inicialización del sistema.
+* ``Device``: Este es un módulo implementa la estructura necesaria para el cada device, con ello poder gestionar el ciclo de vida del mismo.
+* ``Group``: Esta es una estructura base la cual implementa las características básicas de un grupo de broadcast. Es empleado por el ``GroupManager`` para el control de los comandos enviados de forma de mensaje broadcast.
+
+
+
+
+**Paso 6:** Define Interfaces for Instantiated Elements.
+
+El flujo de información entre los módulos se realiza empleando el concepto de paquetes, donde cada paquete contiene la información necesaria para cada módulo destino, por ejemplo, del ``APIServer`` sale un paquete con la información enviada desde el cliente, esta es tomada por el ``Manager`` y clasificada para ser enviada por alguna de las ramas definidas. Así también se envía un paquete desde el DeviceManager hasta el ``TransportClient`` para ser enviado al dispositivo, en este último paquete únicamente se especifica un solo dispositivo. 
+
+Otro punto importante a mencionar es el sistema de etiquetado el cual debe ser capaz de identificar cada request, comando y dispositivo involucrado en el sistema, ya que de eso depende la eficacia del sistema. En términos sencillos el eieManager debe comportarse como un servidor y como un router el cual recibe los request desde un cliente, y la vez transporta los resultados desde los dispositivos hasta el cliente.
+
+**Paso 7:** Verify and Refine Requirements and Make Them Constraints for Instantiated Elements.
+
+
+Al analizar los pasos anteriores podemos verificar el cumplimiento de los requerimientos, con la unica observacion que la definición de protocolo para este contexto no se especifica del todo, ya que de protocolos de comunicaciones existen múltiples como por ejemplo TCP, UDP, entre otros, sin embargo no se especifica si el protocolo se refiere a estos mencionados, o a formatos de serialización de datos.
+
+
+
 
 
 **eieDevice**
