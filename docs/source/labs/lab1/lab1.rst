@@ -9,39 +9,38 @@ Laboratorio 1
 Planeamiento
 ************
 
+.. introduccion\n
+
+#.
+
 Requerimientos
 **************
 
 Requerimientos Funcionales:
 ===========================
 
-#. El sistema debe funcionar como una especie de API para controlar los dispositivos de forma remota desde el client y hasta los dispositivos asi como devolver respuesta de los mismos al client de ser necesario.
-#. El sistema deberá comunicarse de ida y vuelta con un cliente externo al sistema por medio de protocolos (TCP/UDP/MQTT entre otros) todo basado en RPC
-#. El sistema deberá comunicarse de ida y vuelta con N dispositivos externos al sistema por medio de protocolos (TCP/UDP/MQTT entre otros) todo basado en RPC
-#. El sistema deberá contar con un set de comandos definidos e indentificables por nombre, así como desplegar un mensaje de error en el client cuando el dispositivo seleccionado no soporta dicho comando.
-#. El sistema debe ser capaz de comunicarse con un dispositivo seleccionado o bien comunicarse con todos los dispositivos al mismo tiempo por medio de broadcast.
-#. Cuando se trate de un mensaje de broadcast, el sistema debe captar la respuesta de todos los dispositivos y una vez hecho esto formular una respuesta que darle al client.
-#. El sistema deberá validar cada uno de los comandos con el fin de generar una señal de error si fuese necesario.
-#. .El sistema será capaz de volver a su estado normal de operación después de un fallo de cualquier tipo.
+* ``F-REQ-001`` El sistema debe funcionar como un API (Aplication programming interface) para controlar los dispositivos de forma remota desde el client y hasta los dispositivos asi como devolver respuesta de los mismos al client de ser necesario.
+* ``F-REQ-002`` El sistema deberá comunicarse de ida y vuelta con un cliente externo al sistema.
+* ``F-REQ-003`` El sistema deberá comunicarse de ida y vuelta con N dispositivos externos al sistema por medio de protocolos (HTTP/HTTPs) todo basado en la metodología RPC
+* ``F-REQ-004`` El sistema deberá contar con un set de comandos definidos e indentificables por nombre, así como desplegar un mensaje de error en el client cuando el dispositivo seleccionado no soporta dicho comando.
+* ``F-REQ-005`` El sistema debe ser capaz de comunicarse con un dispositivo seleccionado o bien comunicarse con todos los dispositivos al mismo tiempo, usando broadcast.
+* ``F-REQ-006`` Cuando se trate de un mensaje de broadcast, el sistema debe captar la respuesta de todos los dispositivos y una vez hecho esto formular una respuesta que devolverle al client.
+* ``F-REQ-007`` El sistema deberá validar cada uno de los comandos con el fin de generar una señal de error si fuese necesario.
+* ``F-REQ-008`` El sistema será capaz de volver a su estado normal de operación después de un fallo.
+* ``F-REQ-009`` El sistema sea capaz de soportar una amplia variedad de comandos, y que además sea sencillo agregar nuevos comandos. 
+* ``F-REQ-010`` La aplicación deberá ser capaz de recibir más comandos del client, sin que necesariamente el dispositivo haya devuelto una respuesta. (Funcionamiento similar al de una cola)
 
-Requerimientos de desempeño:
-============================
+Requerimientos No Funcionales:
+==============================
 
-#. El sistema debe ser capaz de soportar N clientes controlando dispositivos.
-#. El sistema debe ser capaz de soportar N dispositivos por cliente con el menor impacto rendimiento posible.
-#. La aplicación deberá ser capaz de recibir más comandos del client, sin que necesariamente el dispositivo haya devuelto una respuesta. (Multi hilo)
-
-Requerimientos del sistema:
-===========================
-
-#. El sistema debe poder ser utilizado por cualquier ambiente de desarrollo externo, es decir cualquier otra plataforma en cualquier lenguaje debe poder hacer uso de la aplicación.
-#. El sistema debe soportar cualquier tipo de dispositivo sin importar fabricante y características.
-#. El sistema debe ser capaz de generar alta variedad de comandos de forma sencilla y rápida.
-#. El sistema debe ser capaz de entender cualquier distribución de linux.
+* ``NF-REQ-001`` El sistema debe poder ser utilizado por cualquier ambiente de desarrollo externo, es decir cualquier otra plataforma en cualquier lenguaje debe poder hacer uso de la aplicación. 
+* ``NF-REQ-002`` El sistema debe soportar cualquier tipo de dispositivo capaz de ejecutar el sistema de ``eieDevice``.
+* ``NF-REQ-003`` El sistema debe ser capaz de entender cualquier distribución de linux. (Compatibilidad)
+* ``NF-REQ-004`` El sistema debe cumplir con las normas de seguridad informática y no presentar vulnerabilidades. (Seguridad)
+* ``NF-REQ-005`` El sistema debe ser lo suficientemente ligero como para no impactar en sobremanera el desempeño del dispositivo que lo está usando. (Desempeño)
 
 Attribute-Driven Design (ADD)
 *****************************
-
 
 En esta sección se realiza el análisis del problema empleando ADD. Para ello se discutirá empleando la secuencia de pasos dispuesto en el paper Attribute-Driven Design (ADD),
 Version 2.0. Los pasos descritos en el paper anterior son los siguientes:
@@ -87,7 +86,7 @@ En este paso se identifican y categorizan los requerimientos del elemento. En es
 || esto no debe implicar cambios en el API. Además, ciertos dispositivos y  |        |        |
 || casos de uso podrían requerir nuevos protocolos de comunicación.         |        |        |
 +---------------------------------------------------------------------------+--------+--------+
-|| Que el sistema sea capaz de generar una amplia variedad de comandos.     |  Alta  |  Media |
+|| Que el sistema sea capaz de soportar una amplia variedad de comandos.    |  Alta  |  Media |
 || Nuevos comandos deben ser sencillos de agregar.                          |        |        |
 +---------------------------------------------------------------------------+--------+--------+
 || Que el sistema tenga un rendimiento y escalabilidad adecuada al operar   |  Media |  Alta  |
@@ -237,7 +236,7 @@ Entonces a partir del análisis anterior podemos plantear un bloque llamado **Tr
 
 * ``Command``: De este módulo se derivan los comandos soportados por el sistema, es decir, cada comando se define por herencia a partir de la interfaz implementada en el bloque comando. Este recibe el identificador del comando y la lista de argumentos requeridos por el sistema. 
 * ``CommandManager``: En este módulo se implementa el invocador de los comandos, el cual es el encargado de registrar los comandos, e invocar su ejecución. Además se encarga de implementar una cola la cual se llena con las requests entrantes desde el ``TransportServer``.
-* ``ConfigDev``(opcional): En este módulo se definen las configuraciones necesarias para el sistema. Las cuales son determinadas para cada uno de los dispositivos ``eieDevice``.
+* ``ConfigDev``: En este módulo se definen las configuraciones necesarias para el sistema. Las cuales son determinadas para cada uno de los dispositivos ``eieDevice``.
 * ``TransportServer``: En este se implementa la lógica requerida para poder responder a request provenientes del ``eieManager``. Como se mencionó en la etapa anterior, este bloque se basa en la metodología Strategy, por lo tanto en este módulo se define la lógica del contexto, el cual se define como un **listener**, debido a que es un sistema de tipo servidor. Además es el encargado de definir el tipo de protocolo, a partir de la configuración determinada en el módulo ``ConfigDev``. 
 * ``Protocolo``: En este módulo se implementa la interfaz base del protocolo, así como los protocolos soportados.
 
@@ -254,10 +253,6 @@ Debido a que el sistema es un servidor este debe tener una rutina de inicializac
 Al emplear el patrón de diseño **command** Se garantiza la funcionalidad requerida en el primer requerimiento del sistema y el cuarto requerimiento, ya que agregar nuevos comandos se vuelve muy sencillo, y es posible soportar múltiples comandos. Además entre las funciones del ``commandManager`` se encuentra la de implementar una cola de comandos, lo cual cumple con los requerimientos solicitados. Al emplear la metodología de strategy nos garantizamos el cumplimiento del tercer requerimiento solicitado para el ``eieDevice``. Además nos garantizamos con el cumplimiento del atributo de calidad de modificabilidad ya que los protocolos soportados son mantenibles. 
 
 En el caso del segundo requerimiento éste no afecta la arquitectura del sistema por lo tanto no tiene repercusión en las decisiones de diseño tomadas.
-
-
-
-
 
 
 Patrones de diseño
