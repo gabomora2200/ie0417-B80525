@@ -9,6 +9,18 @@ Laboratorio 1
 Planeamiento
 ************
 
+.. introduccion
+
+Releases:
+=========
+
+#. Completar un API que sea funcional y que cumpla con los requerimientos funcionales del mismo. 
+#. Completar todos los "managers" y sus funcionalidades. (``Manager``, ``GroupManager``, ``DeviceManager``, ``DatabaseHandler``)
+#. Completar la capa de comandos. (``CommandInvoker``, ``CommandRegistry``, ``CommandInfo``) 
+#. Completar capa transporte del ``eieManager``. (``TransportClient``, ``RPCClient``)
+#. Completar capa transporte del ``eieDevice``. (``TransportServer``, ``Protocol``)
+#. Completar la capa de commando. (``CommandManager``, ``Command``)
+
 Requerimientos
 **************
 
@@ -287,6 +299,8 @@ En este caso se hace uso de la clase llamada ``commandInvoker``, la cual se enca
 
 Diagramas UML
 *************
+
+
 
 
 
