@@ -1,0 +1,24 @@
+@startuml
+title Classes - Class Diagram
+
+Class DatabaseHandler{}
+APIServer -down-- eieManager
+CommandInvoker -left-- eieManager
+
+CommandRegistry--|> CommandInvoker
+CommandInfo --|> CommandRegistry
+
+eieManager -- GroupManager
+eieManager -- DeviceManager
+
+Group -up--|> GroupManager
+Device -up--|> DeviceManager
+
+TransportClient -right-- eieManager
+
+
+TransportClient <|.. RPCClient
+TransportClient <|.. TCPClient
+TransportClient <|.. UDPClient
+
+@enduml

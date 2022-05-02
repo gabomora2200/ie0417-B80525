@@ -288,5 +288,113 @@ En este caso se hace uso de la clase llamada ``commandInvoker``, la cual se enca
 Diagramas UML
 *************
 
+A partir de lo mencionado anteriormente, se realizaron los diagramas UML de clases para los componentes eieManager y eieDevice con las clases designadas para cada componente. Los diagramas realizados son los siguientes:
+
+.. uml::
+
+  title Classes - Class Diagram
+
+  Class DatabaseHandler{}
+  APIServer -down-- eieManager
+  CommandInvoker -left-- eieManager
+
+  CommandRegistry--|> CommandInvoker
+  CommandInfo --|> CommandRegistry
+
+  eieManager -- GroupManager
+  eieManager -- DeviceManager
+
+  Group -up--|> GroupManager
+  Device -up--|> DeviceManager
+
+  TransportClient -right-- eieManager
 
 
+  TransportClient <|.. RPCClient
+  TransportClient <|.. TCPClient
+  TransportClient <|.. UDPClient
+
+.. uml::
+
+  title Classes - eieDevice
+
+  TransportServer -- eieDevice
+
+  Protocol -right-- eieDevice
+  ConfigDev -- eieDevice
+
+  Command_Manager -left-- eieDevice
+
+  Protocol <|.. RPCServer
+  Protocol <|.. TCPServer
+  Protocol <|.. UDPServer
+
+  Command_Manager <|-- Command
+  
+Teniendo los diagramas de clases, se procedio a realizar los diagramas secuenciales para los comandos a dispositivos específicos y a grupos de broadcast, esto para tener mejor control de cuales son los procesos o clases que llevan el flujo del programa. El diagrama secuencial de la comunicacion con un dispositivo es el siguiente:
+
+.. uml::
+
+  title Device - Sequence Diagram
+
+  Client -> APIServer: Solicitud de datos/acciones
+
+  APIServer -> Manager: Lectura e invocación del comando
+
+  Manager -> DeviceManager: Se obtiene la información del dispositivo solicitado
+
+  Manager <- DeviceManager: Se obtiene la información del dispositivo solicitado
+
+  APIServer <- Manager: Datos/acciones efectuadas a la solicitud
+
+  Client <- APIServer: Respuesta de de datos/acciones
+
+.. uml::
+
+  DeviceManager -> CommandInvoker: Se solicita implementación del comando
+  
+  CommandInvoker <-> TransportProxy: Envio del comando entre los sistemas
+
+  TransportProxy -> Device: Lectura e implementación del comando
+
+  TransportProxy <- Device: Respuesta al comando recibido
+
+  CommandInvoker <-> TransportProxy: Respuesta del dispositivo entre los sistemas
+
+  DeviceManager <- CommandInvoker: Se proporciona respuesta del dispositivo
+
+El diagrama secuencial de la comunicacion con un grupo de broadcast es el siguiente:
+
+.. uml::
+
+  title Group - Sequence Diagram
+
+  Client -> APIServer: Solicitud de datos/acciones
+
+  APIServer -> Manager: Lectura e invocación del comando
+
+  Manager -> GroupManager : Se obtiene la información del dispositivo solicitado
+
+  Manager <- GroupManager : Se obtiene la información del grupo solicitado
+
+  APIServer <- Manager: Datos/acciones efectuadas a la solicitud
+
+  Client <- APIServer: Respuesta de de datos/acciones
+
+.. uml::
+
+  GroupManager -> DeviceManager: Indica cuales dispositivos deben ser utilizados
+
+  DeviceManager -> CommandInvoker: Se solicita implementación del comando
+
+  CommandInvoker <-> TransportProxy: Envio del comando entre los sistemas
+
+  TransportProxy -> Group: Lectura e implementación del comando
+
+  TransportProxy <- Group: Respuesta al comando recibido
+
+  CommandInvoker <-> TransportProxy: Respuesta del grupo entre los sistemas
+
+  DeviceManager <- CommandInvoker: Se proporciona respuesta del dispositivo
+
+  GroupManager <- DeviceManager: Verifica la respuesta de todos los dispositivos

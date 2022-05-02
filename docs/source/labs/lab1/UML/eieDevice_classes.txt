@@ -1,0 +1,17 @@
+@startuml
+title Classes - eieDevice
+
+TransportServer -- eieDevice
+
+Protocol -right-- eieDevice
+ConfigDev -- eieDevice
+
+Command_Manager -left-- eieDevice
+
+Protocol <|.. RPCServer
+Protocol <|.. TCPServer
+Protocol <|.. UDPServer
+
+Command_Manager <|-- Command
+
+@enduml
