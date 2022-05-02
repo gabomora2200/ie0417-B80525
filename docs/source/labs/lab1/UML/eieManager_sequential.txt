@@ -1,0 +1,16 @@
+@startuml
+title Message Style - Sequence Diagram
+
+Client -> APIServer: Solicitud de datos/acciones
+
+APIServer -> eieManager: Lectura e invocación del comando
+
+eieManager <-> TransportProxy: Manejo del comando/respuesta entre los sistemas
+
+eieManager <-> TransportProxy: Manejo del comando/respuesta entre los sistemas
+
+APIServer <- eieManager: Datos/acciones efectuadas a la solicitud
+
+Client <- APIServer: Respuesta de de datos/acciones
+
+@enduml
