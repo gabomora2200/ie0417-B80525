@@ -9,7 +9,9 @@ Laboratorio 1
 Planeamiento
 ************
 
-.. introduccion
+Para el presente proyecto, se utiliza el framework de desarrollo y manejo de proyectos `SCRUM`. Por lo que el primer paso a seguir es separar el problema  en releases o entregas estratégicas y coherentes de tal forma que al cumplir uno de estos milestones, el mismo sirva para desarrollar la entrega posterior.
+
+Cada release o `sprint`, se hace pensando en desarrollar un componente completamente funcional del software o sistema en cuestión.
 
 Releases:
 =========
