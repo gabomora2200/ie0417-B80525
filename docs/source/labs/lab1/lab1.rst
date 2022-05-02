@@ -410,10 +410,6 @@ El diagrama secuencial de la comunicacion con un grupo de broadcast es el siguie
   CommandInvoker <-> TransportProxy: Respuesta del grupo entre los sistemas
 
   DeviceManager <- CommandInvoker: Se proporciona respuesta del dispositivo
-
-<<<<<<< HEAD
+  
   GroupManager <- DeviceManager: Verifica la respuesta de todos los dispositivos
-=======
 
-
->>>>>>> 01a79162f957bc3c04a8539fd0b039119a9003ff
