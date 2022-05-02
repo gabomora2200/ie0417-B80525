@@ -1,0 +1,27 @@
+@startuml
+title Device - Sequence Diagram
+
+Client -> APIServer: Solicitud de datos/acciones
+
+APIServer -> Manager: Lectura e invocación del comando
+
+Manager -> DeviceManager: Se obtiene la información del dispositivo solicitado
+
+DeviceManager -> CommandInvoker: Se solicita implementación del comando
+
+CommandInvoker <-> TransportProxy: Envio del comando entre los sistemas
+
+TransportProxy -> Device: Lectura e implementación del comando
+
+TransportProxy <- Device: Respuesta al comando recibido
+
+CommandInvoker <-> TransportProxy: Respuesta del dispositivo entre los sistemas
+
+DeviceManager <- CommandInvoker: Se proporciona respuesta del dispositivo
+
+Manager <- DeviceManager: Se obtiene la información del dispositivo solicitado
+
+APIServer <- Manager: Datos/acciones efectuadas a la solicitud
+
+Client <- APIServer: Respuesta de de datos/acciones
+@enduml

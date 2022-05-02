@@ -1,8 +1,0 @@
-@startuml
-title Message Style - Sequence Diagram
-
-TransportProxy -> Device: Lectura e implementación del comando
-
-TransportProxy <- Device: Respuesta al comando recibido
-
-@enduml
