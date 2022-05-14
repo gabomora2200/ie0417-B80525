@@ -1,6 +1,7 @@
 """
 Devices entry point.
 """
+from typing import List
 from ..Device import Device
 
 from .Sensor import Sensor
@@ -31,12 +32,14 @@ class DeviceFactory():
         """
         return [stype for stype in self._device_type_to_cls.keys()]
 
-    def __call__(self, name: str, stype: str) -> Sensor:
+    def __call__(self, name: str, stype: str) -> Device:
         """
         Creates the Device.
 
-        :param str name: Name of the sensor to create.
-        :param str stype: Sensor type.
+        :param str name: Name of the device to create.
+        :param str stype: Device type.
+        :param list commands: List of device commands.
+        :param str netInfo: Device network information
         """
-        sensor_cls = self._sensor_type_to_cls[stype]
-        return sensor_cls(name)
+        device_cls = self._device_type_to_cls[stype]
+        return device_cls(name)
