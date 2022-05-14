@@ -6,7 +6,7 @@ from ..Device import Device
 class HomeDevice (Device):
     def __init__(self, id: str, 
             d_type: str, 
-            command: List[], 
+            command: List[str], 
             net_info: str) -> None:
         super().__init__(id, d_type, command, net_info)
 
