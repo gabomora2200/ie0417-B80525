@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class Device(BaseModel):
     name: str
     type: str
-    commands: List[]
+    commands: str
     host: str
 
 app = FastAPI()
