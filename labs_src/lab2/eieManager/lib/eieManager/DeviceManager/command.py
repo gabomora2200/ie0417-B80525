@@ -1,7 +1,6 @@
 import threading
 import queue
 from abc import ABC, abstractmethod
-from ratelimiter import RateLimiter  # type: ignore
 from typing import Optional
 
 
@@ -24,16 +23,7 @@ class CommandRunner:
     :param int period_sec: Number of seconds per time period.
     :param int cmd_qsize: Size of the queue to store commands to be processed.
     """
-    def __init__(
-            self,
-            cmd_per_period: int = 10,
-            period_sec: int = 1,
-            cmd_qsize: int = 100,
-    ) -> None:
-        self.cmd_per_period = cmd_per_period
-        self.period_sec = period_sec
-        self.cmd_rate_limiter = RateLimiter(
-            max_calls=self.cmd_per_period, period=self.period_sec)
+    def __init__(self) -> None:
         self.cmd_queue: queue.Queue[Optional[Command]] = queue.Queue()
         self.cmd_worker = threading.Thread(target=self.run)
 

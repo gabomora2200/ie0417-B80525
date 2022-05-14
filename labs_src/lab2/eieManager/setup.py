@@ -80,7 +80,7 @@ def find_requirements(filename):
 
 setup(
     name='sensor_commands',
-    version=find_version('lib/sensor_commands/__init__.py'),
+    version=find_version('lib/eieManager/__init__.py'),
     package_dir={'': 'lib'},
     packages=find_packages('lib'),
     include_package_data = True,

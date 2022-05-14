@@ -42,4 +42,5 @@ class DeviceFactory():
         :param str netInfo: Device network information
         """
         device_cls = self._device_type_to_cls[stype]
+        print(device_cls)
         return device_cls(name)

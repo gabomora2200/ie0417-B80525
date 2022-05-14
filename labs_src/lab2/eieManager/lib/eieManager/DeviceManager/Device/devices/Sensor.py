@@ -1,6 +1,8 @@
 from random import random
+from typing import List
 
 from ..Device import Device
+
 
 
 class Sensor (Device):
@@ -10,5 +12,15 @@ class Sensor (Device):
             net_info: str) -> None:
         super().__init__(id, d_type, command, net_info)
 
-    def read()->float:
-        return random.random()
+    # def read()->float:
+    #     return random.random()
+
+    def status(self) -> str:
+        """
+        Return a random value
+        """
+        return choice(["Recording", "OFF"])
+
+    def set_device(self, *args, **kwargs) -> None:
+        for arg in args:
+            print(f"arg: {arg}")

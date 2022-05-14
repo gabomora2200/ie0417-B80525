@@ -44,13 +44,13 @@ class Device(ABC):
         """
         return self._net_info
 
-    @abstractmethod
-    def read(self) -> float:
-        """
-        Reads data from the device.
-        :return: Device reading.
-        """
-        pass
+    # @abstractmethod
+    # def read(self) -> float:
+    #     """
+    #     Reads data from the device.
+    #     :return: Device reading.
+    #     """
+    #     pass
     @abstractmethod
     def status(self) -> str:
         """

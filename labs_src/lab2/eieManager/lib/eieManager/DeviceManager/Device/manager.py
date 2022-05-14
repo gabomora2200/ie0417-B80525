@@ -1,7 +1,6 @@
 import json
 from typing import Optional, List, Dict
 
-from click import command
 
 from ..command import Command
 from .devices import DeviceFactory
@@ -44,6 +43,7 @@ class DeviceManager:
             for device_info in devices_info:
                 name = device_info["id"]
                 stype = device_info["type"]
+                print(name, stype)
                 self.devices[name] = self.device_factory(name, stype)
         self._init_devices_per_type()
 
