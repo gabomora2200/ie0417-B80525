@@ -14,22 +14,27 @@ def main():
 
     device_manager = DevMan(device_path)
     
-    
 
-    device_mgr = DeviceManager(device_path)
-    device_cmd_runner = command.CommandRunner()
+    print(device_manager.device_info("Dev-02"))
 
-    device_cmd_runner.start()
+    print(device_manager.devices_info())
+
+    device_manager.create_device("Dev-100", "Alarm", ["Status"], "192.168.0.90:5000")
+
+    print("\n\n")
+    print(device_manager.devices_info())
+
+    device_manager.update_device("Dev-100", "SecurityCamera", ["Status", "Set_device"], "192.168.1.90:7000")
+
+    print("\n\n")
+    print(device_manager.devices_info())
+
+    device_manager.delete_devices("Dev-100")
+
+    print("\n\n")
+    print(device_manager.devices_info())
 
 
-    device_ex = device_mgr.create_device_status_cmd("Dev-03")
-    device_cmd_runner.send(device_ex)
-
-    device_ex = device_mgr.create_device_status_cmd("Dev-02")
-    device_cmd_runner.send(device_ex)
-
-    device_cmd_runner.stop()
-    
 
 
 

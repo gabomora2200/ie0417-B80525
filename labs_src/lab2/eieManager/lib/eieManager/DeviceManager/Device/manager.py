@@ -4,7 +4,7 @@ from xmlrpc.client import _datetime_type
 
 from ..command import Command
 from .devices import DeviceFactory
-from .Device import Device, DeviceReadCommand, DeviceStatusCommand, DeviceSetDeviceCommand
+from .Device import Device, DeviceStatusCommand, DeviceSetDeviceCommand
 
 
 class DeviceManager:
