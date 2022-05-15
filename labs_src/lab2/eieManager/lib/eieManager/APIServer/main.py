@@ -43,7 +43,7 @@ def create_device(device: Device):
     Create a device and register it
     """
     device_manager.create_device(device.id, device.types, device.commands, device.net_info)
-    devices_inv[device.id] = device
+    #devices_inv[device.id] = device
     return device
 
 
@@ -62,8 +62,8 @@ def update_device(device: Device):
     """
     Update a device
     """
-    device_manager.create_device(device.id, device.types, device.commands, device.net_info)
-    devices_inv[device.id] = device
+    device_manager.update_device(device.id, device.types, device.commands, device.net_info)
+    #devices_inv[device.id] = device
     return device
 
 @app.delete("/devices/{device_name}")
@@ -71,8 +71,8 @@ def delete_device(device_name: str, status_code=204):
     """
     Unregister and delete a device.
     """
-    device_manager.delete_device(device.id, device.types, device.commands, device.net_info)
-    del devices_inv[device_name]
+    device_manager.delete_device(device_name)
+    #del devices_inv[device_name]
 
 @app.get("/devices/")
 def devices_info():
@@ -89,5 +89,5 @@ def device_info(device_name: str):
     Get the information of a device
     """
     info = device_manager.device_info(device_name)
-    return info
+    return json.dump(info)
 
