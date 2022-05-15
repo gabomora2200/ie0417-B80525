@@ -1,5 +1,6 @@
 import json
 from typing import Optional, List, Dict
+from xmlrpc.client import _datetime_type
 
 from ..command import Command
 from .devices import DeviceFactory
@@ -57,6 +58,27 @@ class DeviceManager:
         """
         self.devices[id] = self.device_factory(id, d_type, commands, net_info)
         self._init_devices_per_type()
+
+    def update_device(self, id: str, d_type: str, commands: List[str], net_info: str ) -> None:
+        """
+        Updates a device.
+        :param str id: id of the desired device.
+        :param str d_type: type of device.
+        :param List str commands: list of available device commands.
+        :param str net_info: network information for a device.
+        """
+        for device in self.devices:
+            self.devices[id] = self.device_factory(id, d_type, commands, net_info)
+        self._init_devices_per_type()
+
+    def delete_device(self, id: str) -> None:
+        """
+        Destroys a device by its ID.
+        :param str id: id that points to the desired device.
+        """
+        dv = self.devices[id]
+        del self.devices_per_type[dv.get_type()][id]
+        del self.devices[id]
 
     def get_device_types(self) -> List[str]:
         """
