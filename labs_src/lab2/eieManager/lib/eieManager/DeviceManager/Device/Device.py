@@ -14,7 +14,7 @@ class Device(ABC):
     :param list command: List of commands supported by the device.
     :param str net-info: ip and port.
     """
-    def __init__(self, id: str, d_type: str, command: List, net_info: str) -> None:
+    def __init__(self, id: str, d_type: str, command: List[str], net_info: str) -> None:
         self._id = id
         self._type = d_type
         self._command = command
@@ -25,6 +25,12 @@ class Device(ABC):
         Gets the id of the device.
         """
         return self._id
+
+    def update_values(self, d_type: str, command: List[str], net_info: str) -> None:
+        self._type = d_type
+        self._command = command
+        self._net_info = net_info
+
 
     def get_type(self) -> str:
         """

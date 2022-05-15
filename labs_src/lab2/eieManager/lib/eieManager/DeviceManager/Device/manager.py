@@ -67,9 +67,11 @@ class DeviceManager:
         :param List str commands: list of available device commands.
         :param str net_info: network information for a device.
         """
-        for device in self.devices:
-            self.devices[id] = self.device_factory(id, d_type, commands, net_info)
-        self._init_devices_per_type()
+        self.devices[id].update_values(d_type, commands, net_info)
+        #device.update_values(d_type, commands, net_info)
+        #self.devices[id] = device 
+
+                
 
     def delete_device(self, id: str) -> None:
         """
