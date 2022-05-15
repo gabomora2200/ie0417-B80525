@@ -1,7 +1,6 @@
 import json
 from typing import Optional, List, Dict
 
-
 from ..command import Command
 from .devices import DeviceFactory
 from .Device import Device, DeviceReadCommand, DeviceStatusCommand, DeviceSetDeviceCommand
