@@ -15,8 +15,10 @@ class Alarm (Device):
         """
         Return a random value
         """
+        print("Executing status command")
         return choice(["ARMED", "DISARMED"])
 
     def set_device(self, *args, **kwargs) -> None:
+        print("Executing set_device command")
         for arg in args:
             print(f"arg: {arg}")

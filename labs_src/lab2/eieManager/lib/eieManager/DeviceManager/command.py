@@ -27,6 +27,8 @@ class CommandRunner:
         self.cmd_queue: queue.Queue[Optional[Command]] = queue.Queue()
         self.cmd_worker = threading.Thread(name="run_task", target=self.run)
 
+        self.event = threading.Event() 
+
     def send(self, cmd: Command) -> bool:
         """
         Queues command for execution (non-blocking).
