@@ -13,8 +13,8 @@ class DevMan():
         self.config_path = config_path
         self.device_mgr = DeviceManager(config_path)
         self.cmd_runner = command.CommandRunner()
-        
-        
+        self.cmd_runner.start()
+             
 
 
     def create_device(self, id: str, 
@@ -40,15 +40,18 @@ class DevMan():
         return "ok"
 
     def get_command(self, id: str, cmd: str, 
-            args: Optional[List[str]]) -> str:
+            args: Optional[List[str]] = None) -> str:
     
         
         if(cmd == "Status"):
+            print("Executing command")
             cmd_ex = self.device_mgr.create_device_status_cmd(id)
             self.cmd_runner.send(cmd_ex)
         
         elif(cmd == "Set_device"):
-            self.device_mgr
+            cmd_ex = self.device_mgr.create_device_set_device_cmd(id, args)
+            self.cmd_runner.send(cmd_ex)
+            
         
 
 
@@ -73,6 +76,8 @@ class DevMan():
             new_config = config_info
         with open(self.config_path, 'w') as config_file:
             config_file.write(json.dumps(new_config, indent = 4))
+
+        return "Ok"
     
 
     def delete_devices(self, id: str) -> str:
@@ -95,6 +100,8 @@ class DevMan():
 
         with open(self.config_path, 'w') as config_file:
             config_file.write(json.dumps(new_config, indent = 4))
+
+        return "Ok"
         
 
 

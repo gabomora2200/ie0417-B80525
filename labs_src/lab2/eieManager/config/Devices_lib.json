@@ -1,34 +1,47 @@
 {
     "Devices": [
-        
         {
             "id": "Dev-02",
             "type": "Display",
-            "commands": ["Status", "Set_device"],
+            "commands": [
+                "Status",
+                "Set_device"
+            ],
             "net_info": "192.168.0.3:8000"
         },
         {
             "id": "Dev-01",
             "type": "Sensor",
-            "commands": ["Read"],
+            "commands": [
+                "Read"
+            ],
             "net_info": "192.168.0.2:8000"
         },
         {
             "id": "Dev-03",
             "type": "Alarm",
-            "commands": ["Status", "Set_device"],
+            "commands": [
+                "Status",
+                "Set_device"
+            ],
             "net_info": "192.168.0.4:8000"
         },
         {
             "id": "Dev-04",
             "type": "HomeDevice",
-            "commands": ["Status", "Set_device"],
+            "commands": [
+                "Status",
+                "Set_device"
+            ],
             "net_info": "192.168.0.5:8000"
         },
         {
             "id": "Dev-05",
             "type": "SecurityCamera",
-            "commands": ["Status", "Set_device"],
+            "commands": [
+                "Status",
+                "Set_device"
+            ],
             "net_info": "192.168.0.6:8000"
         }
     ]
