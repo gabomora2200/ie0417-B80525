@@ -47,6 +47,17 @@ class DeviceManager:
                 self.devices[name] = self.device_factory(name, stype, cmd, net_if)
         self._init_devices_per_type()
 
+    def set_new_device(self, id: str, d_type: str, commands: List[str], net_info: str ) -> None:
+        """
+        Initializes a new device.
+        :param str id: id of the new device.
+        :param str d_type: type of device.
+        :param List str commands: list of available device commands.
+        :param str net_info: network information for a device.
+        """
+        self.devices[id] = self.device_factory(id, d_type, commands, net_info)
+        self._init_devices_per_type()
+
     def get_device_types(self) -> List[str]:
         """
         Returns the list of device types.
@@ -69,16 +80,6 @@ class DeviceManager:
             ids = [id for id in type_devices.keys()]
         return ids
 
-    def create_device_read_cmd(self, device_name: str) -> Command:
-        """
-        Creates a command to read a device data.
-
-        :param str device_name: Name of the device to read.
-        :param device_name: Name of the device to read.
-        """
-        device = self.devices[device_name]
-        return DeviceReadCommand(device)
-
     def create_device_status_cmd(self, device_name: str) -> Command:
         """
         Creates a command to get a device status.
@@ -89,7 +90,7 @@ class DeviceManager:
         device = self.devices[device_name]
         return DeviceStatusCommand(device)
 
-    def create_device_set_device_cmd(self, device_name: str) -> Command:
+    def create_device_set_device_cmd(self, device_name: str, args: List[str] = None ) -> Command:
         """
         Creates a command to set a device functionality.
 
@@ -97,4 +98,6 @@ class DeviceManager:
         :param device_name: Name of the device to set functionality.
         """
         device = self.devices[device_name]
-        return DeviceSetDeviceCommand(device)
+        return DeviceSetDeviceCommand(device, args)
+
+    

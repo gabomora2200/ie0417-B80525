@@ -44,13 +44,6 @@ class Device(ABC):
         """
         return self._net_info
 
-    # @abstractmethod
-    # def read(self) -> float:
-    #     """
-    #     Reads data from the device.
-    #     :return: Device reading.
-    #     """
-    #     pass
     @abstractmethod
     def status(self) -> str:
         """
@@ -64,27 +57,6 @@ class Device(ABC):
         Set the device's functionality.
         """
         pass
-
-class DeviceReadCommand(Command):
-    """
-    Command to read a Device data.
-
-    :param device: Device object.
-    :type device: :class:`Device`
-    """
-    def __init__(self, device: Device) -> None:
-        self.device = device
-
-    def execute(self) -> str:
-        """
-        Reads the device command and executes it.
-        """
-        name = self.device.get_id()
-        d_type = self.device.get_type()
-        read_value = self.device.read()
-        response = f"DeviceReadCommand: [{d_type}] {name}: {read_value}"
-        print(response)
-        return response
 
 class DeviceStatusCommand(Command):
     """
@@ -114,8 +86,9 @@ class DeviceSetDeviceCommand(Command):
     :param device: Device object.
     :type device: :class:`Device`
     """
-    def __init__(self, device: Device) -> None:
+    def __init__(self, device: Device, args : List[str]= None) -> None:
         self.device = device
+        self.args = args
 
     def execute(self) -> str:
         """
@@ -123,7 +96,7 @@ class DeviceSetDeviceCommand(Command):
         """
         name = self.device.get_id()
         d_type = self.device.get_type()
-        self.device.set_device()
+        self.device.set_device(self.args)
         response = f"DeviceSetDeviceCommand: [{d_type}] {name}: OK"
         print(response)
         return response

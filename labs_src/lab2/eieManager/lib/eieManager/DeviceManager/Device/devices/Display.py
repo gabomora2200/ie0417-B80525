@@ -20,6 +20,3 @@ class Display (Device):
     def set_device(self, *args, **kwargs) -> None:
         for arg in args:
             print(f"arg: {arg}")
-
-    def read(self) ->str:
-        pass
