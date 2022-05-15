@@ -67,9 +67,11 @@ class DeviceManager:
         :param List str commands: list of available device commands.
         :param str net_info: network information for a device.
         """
+
+        del self.devices_per_type[self.devices[id].get_type()][id]
         self.devices[id].update_values(d_type, commands, net_info)
-        #device.update_values(d_type, commands, net_info)
-        #self.devices[id] = device 
+        self._init_devices_per_type()
+    
 
                 
 
@@ -78,8 +80,8 @@ class DeviceManager:
         Destroys a device by its ID.
         :param str id: id that points to the desired device.
         """
-        dv = self.devices[id]
-        del self.devices_per_type[dv.get_type()][id]
+        d_type = self.devices[id].get_type()
+        del self.devices_per_type[d_type][id]
         del self.devices[id]
 
     def get_device_types(self) -> List[str]:
