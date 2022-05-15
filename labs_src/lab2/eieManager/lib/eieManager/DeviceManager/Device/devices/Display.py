@@ -7,11 +7,7 @@ from ..Device import Device
 class Display (Device):
     def __init__(self, id: str, 
             d_type: str, 
-<<<<<<< HEAD
-            command: List[], 
-=======
             command: List[str], 
->>>>>>> Se agregan los dipositivos
             net_info: str) -> None:
         super().__init__(id, d_type, command, net_info)
 

@@ -15,7 +15,7 @@ def main():
     """
 
     
-    device_path = os.getcwd() + "/config/Devices_lib.json"
+    device_path = os.getcwd() + "/../config/Devices_lib.json"
 
     device_mgr = DeviceManager(device_path)
     device_cmd_runner = command.CommandRunner()
@@ -25,6 +25,11 @@ def main():
 
     device_ex = device_mgr.create_device_status_cmd("Dev-03")
     device_cmd_runner.send(device_ex)
+
+    device_ex = device_mgr.create_device_status_cmd("Dev-02")
+    device_cmd_runner.send(device_ex)
+
+    device_cmd_runner.stop()
     
 
 

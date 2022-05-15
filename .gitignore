@@ -56,3 +56,4 @@ dkms.conf
 .Trash*
 .ipynb_checkpoints/
 .vscode/
+__pycache__/

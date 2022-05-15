@@ -67,8 +67,8 @@ class CommandRunner:
             # "None" command is considered a stop signal
             if cmd is None:
                 break
-            with self.cmd_rate_limiter:
-                cmd.execute()
+            # with self.cmd_rate_limiter:
+            cmd.execute()
 
 
 __all__ = [

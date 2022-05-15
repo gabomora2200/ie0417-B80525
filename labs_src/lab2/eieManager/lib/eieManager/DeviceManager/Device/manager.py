@@ -43,8 +43,9 @@ class DeviceManager:
             for device_info in devices_info:
                 name = device_info["id"]
                 stype = device_info["type"]
-                print(name, stype)
-                self.devices[name] = self.device_factory(name, stype)
+                cmd = device_info["commands"]
+                net_if = device_info["net_info"]
+                self.devices[name] = self.device_factory(name, stype, cmd, net_if)
         self._init_devices_per_type()
 
     def get_device_types(self) -> List[str]:

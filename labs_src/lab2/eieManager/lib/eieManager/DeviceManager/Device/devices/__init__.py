@@ -32,7 +32,10 @@ class DeviceFactory():
         """
         return [stype for stype in self._device_type_to_cls.keys()]
 
-    def __call__(self, name: str, stype: str) -> Device:
+    def __call__(self, id: str, 
+            d_type: str, 
+            command: List[str], 
+            net_info: str) -> Device:
         """
         Creates the Device.
 
@@ -41,6 +44,5 @@ class DeviceFactory():
         :param list commands: List of device commands.
         :param str netInfo: Device network information
         """
-        device_cls = self._device_type_to_cls[stype]
-        print(device_cls)
-        return device_cls(name)
+        device_cls = self._device_type_to_cls[d_type]
+        return device_cls(id, d_type, command, net_info)
