@@ -25,7 +25,7 @@ class CommandRunner:
     """
     def __init__(self) -> None:
         self.cmd_queue: queue.Queue[Optional[Command]] = queue.Queue()
-        self.cmd_worker = threading.Thread(target=self.run)
+        self.cmd_worker = threading.Thread(name="run_task", target=self.run)
 
     def send(self, cmd: Command) -> bool:
         """
