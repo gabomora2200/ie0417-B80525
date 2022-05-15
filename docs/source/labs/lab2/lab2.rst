@@ -1,4 +1,4 @@
-*************
+************
 Laboratorio 2
 *************
 
@@ -25,9 +25,8 @@ Los metodos trabajan bajo el route ``/devices``, con excepcion del **Ger_command
 #. Delete_device: Mediante un metodo DELETE al route ``/devices/{ID}`` se elimina el **Device** que comparta el mismo ID del route dentro del eieManager.
 #. Get_command: Mediante un metodo POST al route ``/command`` se envia el comando deseado con la informacion dentro del Body.
 
-Decisiones especiales sobre el diseño:
-**************************************
+Consideraciones especiales de diseño:
+=====================================
 
 #. Con el fin de evitar el acoplamiento entre el ``API`` y el ``DeviceManager`` , y mantener su funcionalidad dentro de los limites de los mismos, se implementó un ``DeviceManager`` global, el cual maneja los comandos del ``CRUD`` y el ``API`` solo consume estos servicios.
 #. Con el fin de apegarse la documentación del ``FastAPI`` se divide el mismo en dos funciones, esto para separar la estructura del ``API``, en dos partes, donde la primera implementa la función base y la segunda contiene la implementación de los entry points. 
- 
