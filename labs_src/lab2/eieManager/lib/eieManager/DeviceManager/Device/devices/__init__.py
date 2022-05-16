@@ -15,6 +15,7 @@ class DeviceFactory():
     """
     Factory that creates a Device of a given type name.
     """
+
     def __init__(self) -> None:
         # Dictionary that maps names of device types to classes.
         self._device_type_to_cls = {
@@ -32,10 +33,10 @@ class DeviceFactory():
         """
         return [stype for stype in self._device_type_to_cls.keys()]
 
-    def __call__(self, id: str, 
-            d_type: str, 
-            command: List[str], 
-            net_info: str) -> Device:
+    def __call__(self, id: str,
+                 d_type: str,
+                 command: List[str],
+                 net_info: str) -> Device:
         """
         Creates the Device.
 
