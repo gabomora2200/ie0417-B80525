@@ -15,6 +15,7 @@ class DevMan():
 
 
 
+
     def create_device(self, id: str,
                       d_type: str,
                       _command: List[str],
@@ -38,12 +39,14 @@ class DevMan():
     def get_command(self, id: str, cmd: str,
                     args: Optional[List[str]] = None) -> str:
 
+
         if(cmd == "Status"):
             print("Executing command")
             cmd_ex = self.device_mgr.create_device_status_cmd(id)
             self.cmd_runner.send(cmd_ex)
             self.e.wait()
             return self.cmd_runner.responses
+
 
         elif(cmd == "Set_device"):
             cmd_ex = self.device_mgr.create_device_set_device_cmd(id, args)
