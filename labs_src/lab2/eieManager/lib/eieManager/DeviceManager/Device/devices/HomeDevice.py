@@ -4,7 +4,7 @@ from typing import List
 from ..Device import Device
 
 
-class HomeDevice (Device):
+class HomeDevice(Device):
     def __init__(self, id: str,
                  d_type: str,
                  command: List[str],
