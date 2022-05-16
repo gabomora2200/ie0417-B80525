@@ -16,7 +16,7 @@ Para el presente laboratorio, se utilizo el web framework de FastAPI para constr
 Metodos de la API:
 ==================
 
-Los metodos trabajan bajo el route ``/devices``, con excepcion del **Ger_command** que utiliza el route ``/command``. Los metodos usados son los siguientes:
+Los metodos trabajan bajo el route ``/devices``, con excepcion del **Get_command** que utiliza el route ``/command``. Los metodos usados son los siguientes:
 
 #. Create_device: Mediante un metodo POST se crea un nuevo **Device** con la informacion suministrada en el Body del metodo.
 #. Update_device: Mediante un metodo PUT se pasa la informacion en el Body del **Device** a cambiar y el backend realiza los cambios respectivos.
