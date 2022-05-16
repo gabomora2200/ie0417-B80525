@@ -9,11 +9,12 @@ class Command(ABC):
     Generic command representation.
     """
     @abstractmethod
-    def execute(self) -> None:
+    def execute(self):
         """
         Executes the command logic.
         """
         pass
+
 
 class CommandRunner:
     """
@@ -26,8 +27,7 @@ class CommandRunner:
     def __init__(self) -> None:
         self.cmd_queue: queue.Queue[Optional[Command]] = queue.Queue()
         self.cmd_worker = threading.Thread(name="run_task", target=self.run)
-
-        self.event = threading.Event() 
+        self.event = threading.Event()
 
     def send(self, cmd: Command) -> bool:
         """
