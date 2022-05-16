@@ -1,6 +1,5 @@
 import json
 from typing import Optional, List, Dict
-from xmlrpc.client import _datetime_type
 
 from ..command import Command
 from .devices import DeviceFactory
