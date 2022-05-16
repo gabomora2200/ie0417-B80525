@@ -38,13 +38,13 @@ devices_inv = {
 '''
 
 @app.post("/devices/")
-def create_device(device: Device):
+def create_device(dev: Device):
     """
     Create a device and register it
     """
-    device_manager.create_device(device.id, device.types, device.commands, device.net_info)
+    device_manager.create_device(dev.id,dev.types,dev.commands,dev.net_info)
     #devices_inv[device.id] = device
-    return device
+    return dev
 
 
 @app.post("/command/")
@@ -89,5 +89,5 @@ def device_info(device_name: str):
     Get the information of a device
     """
     info = device_manager.device_info(device_name)
-    return json.dump(info)
+    return json.dumps(info)
 
