@@ -1,10 +1,8 @@
 Metadata-Version: 2.1
-Name: sensor-commands
+Name: eieManager
 Version: 0.0.1
 Summary: sensor_commands is an example python package for the IE0417 course @ EIE, UCR
 Home-page: http://ie0417.rtfd.org/
-Author: Esteban Zamora Alvarado
-Author-email: esteban.zamora.al@gmail.com
 License: UNKNOWN
 Description: # DEVICE MANAGER
         
