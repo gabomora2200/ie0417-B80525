@@ -1,13 +1,10 @@
 from typing import Dict, Optional, List
 import json
-
-
 from . import command
 from .Device.manager import DeviceManager
 
 
 class DevMan():
-
     def init_devman(self, config_path: str) -> None:
         self.config_path = config_path
         self.device_mgr = DeviceManager(config_path)
@@ -16,13 +13,13 @@ class DevMan():
 
         self.e = self.cmd_runner.event
 
+
+
     def create_device(self, id: str,
                       d_type: str,
                       _command: List[str],
                       net_info: str) -> str:
-
         self.device_mgr.set_new_device(id, d_type, _command, net_info)
-
         new_config = {}
 
         with open(self.config_path, 'r') as config_file:
