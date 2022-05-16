@@ -23,15 +23,13 @@ device_manager.init_devman(args.config)
 
 
 @app.post("/devices/")
-def create_device(dev: Device):
+def create_device(device: Device):
     """
     Create a device and register it
     """
     res = device_manager.create_device(
         device.id, device.types, device.commands, device.net_info)
     return {"Response": res}
-
-
 
 
 @app.post("/command/")

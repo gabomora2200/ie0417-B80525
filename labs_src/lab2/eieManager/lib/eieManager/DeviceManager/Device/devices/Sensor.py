@@ -1,6 +1,5 @@
 from random import choice
 from typing import List
-from random import choice
 from ..Device import Device
 
 

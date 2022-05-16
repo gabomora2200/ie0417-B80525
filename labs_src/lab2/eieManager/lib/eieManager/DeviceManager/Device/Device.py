@@ -55,14 +55,13 @@ class Device(ABC):
         """
         return self._net_info
 
-
     def status(self) -> str:
         """
         Get the device's status info.
         :return: Device status.
         """
         pass
-    
+
     def set_device(self, *args, **kwargs) -> None:
         """
         Set the device's functionality.
