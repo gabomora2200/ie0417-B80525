@@ -7,19 +7,23 @@ Laboratorio 2
 * Gabriel Araya Mora - B80525
 
 Diseño de los endpoints
-************
+***********************
 
-Para el presente laboratorio, se utilizo el web framework de FastAPI para construir la REST API que permita la conexion entre el cliente y el eieManager. La API cuenta con los metodos basicos 
+Para el presente laboratorio, se utilizo el web framework de FastAPI para construir una REST API que permita la conexion entre el cliente y el eieManager. La API cuenta con los metodos HTTP basicos como lo son el GET, POST, PUT y DELETE para manejar el intercambio de informacion con el cliente, y en cada una de las funciones propias del API se interactua con el DeviceManager para el manejo de los Devices.
 
-Releases:
-=========
 
-#. Completar un API que sea funcional y que cumpla con los requerimientos funcionales del mismo. 
-#. Completar todos los "managers" y sus funcionalidades. (``Manager``, ``GroupManager``, ``DeviceManager``, ``DatabaseHandler``)
-#. Completar la capa de comandos. (``CommandInvoker``, ``CommandRegistry``, ``CommandInfo``) 
-#. Completar capa transporte del ``eieManager``. (``TransportClient``, ``RPCClient``)
-#. Completar capa transporte del ``eieDevice``. (``TransportServer``, ``Protocol``)
-#. Completar la capa de commando. (``CommandManager``, ``Command``)
+
+Metodos de la API:
+==================
+
+Los metodos trabajan bajo el route ``/devices``, con excepcion del **Ger_command** que utiliza el route ``/command``. Los metodos usados son los siguientes:
+
+#. Create_device: Mediante un metodo POST se crea un nuevo **Device** con la informacion suministrada en el Body del metodo.
+#. Update_device: Mediante un metodo PUT se pasa la informacion en el Body del **Device** a cambiar y el backend realiza los cambios respectivos.
+#. Devices_info: Mediante un metodo GET se retorna toda la lista de **Devices** que haya dentro del eieManager.
+#. Device_info: Mediante un metodo GET al route ``/devices/{ID}`` se retorna el **Device** que tenga el mismo ID del route dentro del eieManager.
+#. Delete_device: Mediante un metodo DELETE al route ``/devices/{ID}`` se elimina el **Device** que comparta el mismo ID del route dentro del eieManager.
+#. Get_command: Mediante un metodo POST al route ``/command`` se envia el comando deseado con la informacion dentro del Body.
 
 Requerimientos
 **************
