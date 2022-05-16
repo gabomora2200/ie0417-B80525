@@ -9,7 +9,7 @@ class Command(ABC):
     Generic command representation.
     """
     @abstractmethod
-    def execute(self):
+    def execute(self) -> str:
         """
         Executes the command logic.
         """
@@ -24,10 +24,15 @@ class CommandRunner:
     :param int period_sec: Number of seconds per time period.
     :param int cmd_qsize: Size of the queue to store commands to be processed.
     """
+
     def __init__(self) -> None:
         self.cmd_queue: queue.Queue[Optional[Command]] = queue.Queue()
         self.cmd_worker = threading.Thread(name="run_task", target=self.run)
+
         self.event = threading.Event()
+        self.lock = threading.Lock()
+
+        self.responses = ""
 
     def send(self, cmd: Command) -> bool:
         """
@@ -69,8 +74,12 @@ class CommandRunner:
             # "None" command is considered a stop signal
             if cmd is None:
                 break
-            # with self.cmd_rate_limiter:
-            cmd.execute()
+
+            res = cmd.execute()
+            self.lock.acquire()
+            self.responses = res
+            self.lock.release()
+            self.event.set()
 
 
 __all__ = [

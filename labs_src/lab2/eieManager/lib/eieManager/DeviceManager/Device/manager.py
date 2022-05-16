@@ -49,7 +49,11 @@ class DeviceManager:
                     name, stype, cmd, net_if)
         self._init_devices_per_type()
 
-    def set_new_device(self, id, d_type, commands, net_info) -> None:
+    def set_new_device(
+            self, id: str,
+            d_type: str,
+            commands: List[str],
+            net_info: str) -> None:
         """
         Initializes a new device.
         :param str id: id of the new device.
@@ -60,7 +64,11 @@ class DeviceManager:
         self.devices[id] = self.device_factory(id, d_type, commands, net_info)
         self._init_devices_per_type()
 
-    def update_device(self, id, d_type, commands, net_info) -> None:
+    def update_device(
+            self, id: str,
+            d_type: str,
+            commands: List[str],
+            net_info: str) -> None:
         """
         Updates a device.
         :param str id: id of the desired device.
@@ -114,7 +122,9 @@ class DeviceManager:
         device = self.devices[device_name]
         return DeviceStatusCommand(device)
 
-    def create_device_set_device_cmd(self, device_name, args=None) -> Command:
+    def create_device_set_device_cmd(self,
+                                     device_name: str,
+                                     args: List[str] = None) -> Command:
         """
         Creates a command to set a device functionality.
 

@@ -1,0 +1,3 @@
+[console_scripts]
+eieman = eieManager.main:main
+

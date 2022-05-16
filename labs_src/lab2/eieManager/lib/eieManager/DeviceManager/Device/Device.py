@@ -1,5 +1,5 @@
 from typing import List
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from ..command import Command
 
@@ -14,7 +14,10 @@ class Device(ABC):
     :param str net-info: ip and port.
     """
 
-    def __init__(self, id, d_type, command: List[str], net_info) -> None:
+    def __init__(self, id: str,
+                 d_type: str,
+                 command: List[str],
+                 net_info: str) -> None:
         self._id = id
         self._type = d_type
         self._command = command
@@ -26,7 +29,10 @@ class Device(ABC):
         """
         return self._id
 
-    def update_values(self, d_type, command: List[str], net_info) -> None:
+    def update_values(self,
+                      d_type: str,
+                      command: List[str],
+                      net_info: str) -> None:
         self._type = d_type
         self._command = command
         self._net_info = net_info
@@ -49,15 +55,14 @@ class Device(ABC):
         """
         return self._net_info
 
-    @abstractmethod
+
     def status(self) -> str:
         """
         Get the device's status info.
         :return: Device status.
         """
         pass
-
-    @abstractmethod
+    
     def set_device(self, *args, **kwargs) -> None:
         """
         Set the device's functionality.
