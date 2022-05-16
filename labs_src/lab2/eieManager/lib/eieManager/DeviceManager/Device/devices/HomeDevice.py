@@ -5,10 +5,10 @@ from ..Device import Device
 
 
 class HomeDevice (Device):
-    def __init__(self, id: str, 
-            d_type: str, 
-            command: List[str], 
-            net_info: str) -> None:
+    def __init__(self, id: str,
+                 d_type: str,
+                 command: List[str],
+                 net_info: str) -> None:
         super().__init__(id, d_type, command, net_info)
 
     def status(self) -> str:

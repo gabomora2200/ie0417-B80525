@@ -9,7 +9,7 @@ class Command(ABC):
     Generic command representation.
     """
     @abstractmethod
-    def execute(self) -> None:
+    def execute(self) -> str:
         """
         Executes the command logic.
         """
@@ -79,6 +79,7 @@ class CommandRunner:
             self.lock.acquire()
             self.responses = res
             self.lock.release()
+            self.event.set()
 
 
 __all__ = [

@@ -27,9 +27,9 @@ def create_device(device: Device):
     """
     Create a device and register it
     """
-    device_manager.create_device(
+    res = device_manager.create_device(
         device.id, device.types, device.commands, device.net_info)
-    return device
+    return {"Response": res}
 
 
 @app.post("/command/")
@@ -37,8 +37,9 @@ def get_command(command: Command):
     """
     Send a command and their info
     """
-    device_manager.get_command(command.device_id, command.cmd, command.args)
-    return command
+    res = device_manager.get_command(
+        command.device_id, command.cmd, command.args)
+    return {"Response": res}
 
 
 @app.put("/devices/")
@@ -46,17 +47,18 @@ def update_device(device: Device):
     """
     Update a device
     """
-    device_manager.update_device(
+    res = device_manager.update_device(
         device.id, device.types, device.commands, device.net_info)
-    return device
+    return {"Response": res}
 
 
 @app.delete("/devices/{device_name}")
-def delete_device(device_name: str, status_code=204):
+def delete_devices(device_name: str, status_code=204):
     """
     Unregister and delete a device.
     """
-    device_manager.delete_device(device_name)
+    res = device_manager.delete_devices(device_name)
+    return {"Response": res}
 
 
 @app.get("/devices/")
@@ -75,10 +77,3 @@ def device_info(device_name: str):
     """
     info = device_manager.device_info(device_name)
     return info
-
-
-def get_app():
-    """
-    returns the app instance
-    """
-    return app

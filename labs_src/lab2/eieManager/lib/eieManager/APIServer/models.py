@@ -1,11 +1,13 @@
 from typing import Optional, List
 from pydantic import BaseModel
 
+
 class Device(BaseModel):
     id: str
     types: str
     commands: List[str]
     net_info: str
+
 
 class Command(BaseModel):
     device_id: str

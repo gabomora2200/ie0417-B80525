@@ -1,5 +1,5 @@
 import json
-from typing import Optional, List, Dict
+from typing import List, Dict
 
 from ..command import Command
 from .devices import DeviceFactory
@@ -12,6 +12,7 @@ class DeviceManager:
 
     :param str config_filename: Name of the file with the device config.
     """
+
     def __init__(self, config_filename: str) -> None:
         self.config_filename = config_filename
         self.device_factory = DeviceFactory()
@@ -44,10 +45,15 @@ class DeviceManager:
                 stype = device_info["type"]
                 cmd = device_info["commands"]
                 net_if = device_info["net_info"]
-                self.devices[name] = self.device_factory(name, stype, cmd, net_if)
+                self.devices[name] = self.device_factory(
+                    name, stype, cmd, net_if)
         self._init_devices_per_type()
 
-    def set_new_device(self, id: str, d_type: str, commands: List[str], net_info: str ) -> None:
+    def set_new_device(
+            self, id: str,
+            d_type: str,
+            commands: List[str],
+            net_info: str) -> None:
         """
         Initializes a new device.
         :param str id: id of the new device.
@@ -58,7 +64,11 @@ class DeviceManager:
         self.devices[id] = self.device_factory(id, d_type, commands, net_info)
         self._init_devices_per_type()
 
-    def update_device(self, id: str, d_type: str, commands: List[str], net_info: str ) -> None:
+    def update_device(
+            self, id: str,
+            d_type: str,
+            commands: List[str],
+            net_info: str) -> None:
         """
         Updates a device.
         :param str id: id of the desired device.
@@ -70,9 +80,6 @@ class DeviceManager:
         del self.devices_per_type[self.devices[id].get_type()][id]
         self.devices[id].update_values(d_type, commands, net_info)
         self._init_devices_per_type()
-    
-
-                
 
     def delete_device(self, id: str) -> None:
         """
@@ -115,7 +122,9 @@ class DeviceManager:
         device = self.devices[device_name]
         return DeviceStatusCommand(device)
 
-    def create_device_set_device_cmd(self, device_name: str, args: List[str] = None ) -> Command:
+    def create_device_set_device_cmd(self,
+                                     device_name: str,
+                                     args: List[str] = None) -> Command:
         """
         Creates a command to set a device functionality.
 
@@ -124,5 +133,3 @@ class DeviceManager:
         """
         device = self.devices[device_name]
         return DeviceSetDeviceCommand(device, args)
-
-    

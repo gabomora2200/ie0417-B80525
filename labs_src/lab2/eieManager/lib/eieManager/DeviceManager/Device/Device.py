@@ -1,5 +1,5 @@
 from typing import List
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from ..command import Command
 
@@ -13,7 +13,11 @@ class Device(ABC):
     :param list command: List of commands supported by the device.
     :param str net-info: ip and port.
     """
-    def __init__(self, id: str, d_type: str, command: List[str], net_info: str) -> None:
+
+    def __init__(self, id: str,
+                 d_type: str,
+                 command: List[str],
+                 net_info: str) -> None:
         self._id = id
         self._type = d_type
         self._command = command
@@ -25,11 +29,13 @@ class Device(ABC):
         """
         return self._id
 
-    def update_values(self, d_type: str, command: List[str], net_info: str) -> None:
+    def update_values(self,
+                      d_type: str,
+                      command: List[str],
+                      net_info: str) -> None:
         self._type = d_type
         self._command = command
         self._net_info = net_info
-
 
     def get_type(self) -> str:
         """
@@ -49,19 +55,20 @@ class Device(ABC):
         """
         return self._net_info
 
-    @abstractmethod
+
     def status(self) -> str:
         """
         Get the device's status info.
         :return: Device status.
         """
         pass
-    @abstractmethod
-    def set_device(self,*args, **kwargs) -> None:
+    
+    def set_device(self, *args, **kwargs) -> None:
         """
         Set the device's functionality.
         """
         pass
+
 
 class DeviceStatusCommand(Command):
     """
@@ -70,6 +77,7 @@ class DeviceStatusCommand(Command):
     :param device: Device object.
     :type device: :class:`Device`
     """
+
     def __init__(self, device: Device) -> None:
         self.device = device
 
@@ -84,6 +92,7 @@ class DeviceStatusCommand(Command):
         print(response)
         return response
 
+
 class DeviceSetDeviceCommand(Command):
     """
     Command to set Device functionality.
@@ -91,7 +100,8 @@ class DeviceSetDeviceCommand(Command):
     :param device: Device object.
     :type device: :class:`Device`
     """
-    def __init__(self, device: Device, args : List[str]= None) -> None:
+
+    def __init__(self, device: Device, args: List[str] = None) -> None:
         self.device = device
         self.args = args
 
