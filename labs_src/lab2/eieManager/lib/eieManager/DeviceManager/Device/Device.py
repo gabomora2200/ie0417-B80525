@@ -1,5 +1,4 @@
-from http.client import OK
-from typing import List, Optional
+from typing import List
 from abc import ABC, abstractmethod
 
 from ..command import Command

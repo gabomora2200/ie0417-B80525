@@ -9,7 +9,7 @@ from .Device.manager import DeviceManager
 
 class DevMan():
 
-    def __init__(self, config_path: str) -> None:
+    def init_devman(self, config_path: str) -> None:
         self.config_path = config_path
         self.device_mgr = DeviceManager(config_path)
         self.cmd_runner = command.CommandRunner()
@@ -52,7 +52,6 @@ class DevMan():
             cmd_ex = self.device_mgr.create_device_set_device_cmd(id, args)
             self.cmd_runner.send(cmd_ex)
             
-        
 
 
     def update_device(self, id: str, 
