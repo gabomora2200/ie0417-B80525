@@ -90,12 +90,11 @@ setup(
 
     # Metadata
     description=(
-        'sensor_commands is an example python package for the '
-        'IE0417 course @ EIE, UCR'
+        'DeviceManager. Devices Control API'
     ),
     long_description=read('README.md'),
     long_description_content_type='text/x-rst',
-    url='http://ie0417.rtfd.org/',
+    url='https://ie0417-dev-b80525.readthedocs.io/en/latest/labs/lab2/lab2.html',
 
     classifiers=[
         'Intended Audience :: Developers',
