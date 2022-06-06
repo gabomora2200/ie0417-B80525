@@ -3,6 +3,8 @@
 
 #include <eieDevice/CommandManager/command.h>
 
-static void command_pingpong_execute(const char *name, char *req_msg, char *resp_msg);
+// void command_pingpong_execute(const char *name, char *req_msg, char *resp_msg);
+
+struct Command * command_pingpong_create(const char *name);
 
 #endif // PINGPONG_H_

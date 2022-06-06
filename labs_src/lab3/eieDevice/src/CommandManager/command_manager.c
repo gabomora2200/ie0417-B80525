@@ -30,9 +30,9 @@ static int command_ht_add(struct CommandManager *smgr, struct Command *cmd)
         fprintf(stderr, "Failed to allocate command hash entry\n");
         return -ENOMEM;
     }
-    printf("%s: command name=%s, type=%s\n", __func__, cmd->info.name, cmd->info.type);
+    printf("%s: command name=%s", __func__, cmd->name);
     entry->cmd = cmd;
-    HASH_ADD_KEYPTR(hh, smgr->command_ht, cmd->info.name, strlen(cmd->info.name), entry);
+    HASH_ADD_KEYPTR(hh, smgr->command_ht, cmd->name, strlen(cmd->name), entry);
     return 0;
 }
 
@@ -40,53 +40,28 @@ static int command_ht_add(struct CommandManager *smgr, struct Command *cmd)
 static int command_ht_create(struct CommandManager *smgr)
 {
     int ret;
-    //cJSON *commands = NULL;
-    int num_commands = 0;
-
-    //commands = cJSON_GetObjectItem(smgr->cfg_cjson, "commands");
-    // if (commands == NULL) {
-    //     //fprintf(stderr, "Failed to read commands array: %s\n", cJSON_GetErrorPtr());
-    //     return -1;
-    // }
 
     // Init head entry for command hash table
     smgr->command_ht = NULL;
 
+    char *names[3] = {"message", "status", "ping_pong"};
     // Iterate over config array to create commands
-    //num_commands = cJSON_GetArraySize(commands);
-    for(int i = 0; i < num_commands; i++)
+    for(int i = 0; i < 3; i++)
     {
         struct Command *cmd = NULL;
-        //cJSON *command, *obj;
-        char *name, *type;
-        //command = cJSON_GetArrayItem(commands, i);
-
-        // Read type and name from JSON
-        //obj = cJSON_GetObjectItem(command, "type");
-        // if (obj == NULL) {
-        //     fprintf(stderr, "Failed to read command type: %s\n", cJSON_GetErrorPtr());
-        //     return -1;
-        // }
-        // //type = cJSON_GetStringValue(obj);
-
-        // //obj = cJSON_GetObjectItem(command, "name");
-        // if (obj == NULL) {
-        //     fprintf(stderr, "Failed to read command name: %s\n", cJSON_GetErrorPtr());
-        //     return -1;
-        // }
-        //name = cJSON_GetStringValue(obj);
-
+        char *name = names[i];
+    
         // Create command and add it to hash table
-        cmd = command_factory_command_create(smgr->sf, type, name);
+        cmd = command_factory_command_create(smgr->sf, name);
         if (cmd == NULL) {
-            fprintf(stderr, "Failed to create command with type: %s, name: %s\n",
-                    type, name);
+            fprintf(stderr, "Failed to create command with name: %s\n",
+                name);
             return -1;
         }
         ret = command_ht_add(smgr, cmd);
         if (ret) {
-            fprintf(stderr, "Failed to add command with type: %s, name: %s\n",
-                    cmd->info.type, cmd->info.name);
+            // fprintf(stderr, "Failed to add command with type: %s, name: %s\n",
+            //         cmd->info.type, cmd->info.name);
             return ret;
         }
     }
@@ -141,20 +116,37 @@ struct Command *command_manager_command_get(struct CommandManager *smgr,
     return entry->cmd;
 }
 
-/** Command read command private data */
 struct cmd_ptr {
     struct Command *cmd;
 };
 
 /** Command read command execute function */
-char* cmd_exec_fn(void *data, char* req_msg)
+static void cmd_exec_fn(void *data, char *req_msg, char *resp_msg)
 {
     struct cmd_ptr *cmd_data = data;
     struct Command *cmd = cmd_data->cmd;
-    char *resp_msg = command_execute(cmd, req_msg);
+    resp_msg = command_execute(cmd, req_msg);
     //printf("Command read command: [%s]: %s: %f %s\n",
     //       cmd->info.type, cmd->info.name, val, cmd->info.unit);
-    return resp_msg;
+    // return resp_msg;
+}
+
+void cmd_create_exec(
+    struct CommandManager *smgr,
+    const char *name,
+    char *req_msg,
+    char *resp_msg)
+{
+    struct cmd_ptr *cmd_data = malloc(sizeof(struct cmd_ptr));
+    if (cmd_data == NULL) {
+        fprintf(stderr, "Failed to allocate sensor read command data\n");
+        // return NULL;
+    }
+    struct Command * cmd = command_manager_command_get(smgr, name);
+    // if (cmd == NULL) return NULL;
+    cmd_data->cmd = cmd;
+
+    cmd_exec_fn(cmd_data, req_msg, req_msg);
 }
 
 

@@ -3,6 +3,8 @@
 
 #include <eieDevice/CommandManager/command.h>
 
-static void command_status_execute(const char *name, char *req_msg, char *resp_msg);
+// void command_status_execute(const char *name, char *req_msg, char *resp_msg);
+
+struct Command * command_status_create(const char *name);
 
 #endif // STATUS_H_

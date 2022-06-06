@@ -1,8 +1,13 @@
-#ifndef MANAGER_H_
-#define MANAGER_H_
+#ifndef COMMANDMANAGER_H_
+#define COMMANDMANAGER_H_
 
 #include <cjson/cJSON.h>
-#include <eieDevice/CommandRunner/command/command.h>
+#include <eieDevice/CommandManager/command.h>
+
+// void cmd_exec_fn(void *data, char *req_msg, char *resp_msg);
+
+/** Command read command private data */
+
 
 
 /**
@@ -16,7 +21,7 @@
  *
  * @return Pointer to a command manager structure.
  */
-struct CommandManager *command_manager_create();
+struct CommandManager *command_manager_create(void);
 
 /**
  * Gets a command from its name
@@ -51,5 +56,13 @@ struct Command *command_manager_read_cmd_create(
  * @param smgr Pointer to a command manager structure.
  */
 void command_manager_destroy(struct CommandManager *smgr);
+
+
+
+void cmd_create_exec(
+    struct CommandManager *smgr,
+    const char *name,
+    char *req_msg,
+    char *resp_msg);
 
 #endif // MANAGER_H_

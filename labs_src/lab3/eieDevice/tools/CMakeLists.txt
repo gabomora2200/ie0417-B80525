@@ -1,2 +1,2 @@
-add_subdirectory(eie_dev)
 add_subdirectory(transp_svr)
+add_subdirectory(cmd_mgr)

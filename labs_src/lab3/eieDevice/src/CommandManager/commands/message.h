@@ -3,6 +3,8 @@
 
 #include <eieDevice/CommandManager/command.h>
 
-static void command_message_execute(const char *name, char *req_msg, char *resp_msg);
+// void command_message_execute(const char *name, char *req_msg, char *resp_msg);
+
+struct Command * command_message_create(const char *name);
 
 #endif // MESSAGE_H_
