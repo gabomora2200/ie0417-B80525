@@ -1,60 +1,51 @@
-#ifndef SENSOR_H_
-#define SENSOR_H_
+#ifndef COMMAND_H_
+#define COMMAND_H_
 
-/** General information related to a sensor */
-struct SensorInfo {
-    const char * name;
-    const char * type;
-    const char * unit;
+/** Command operations to implement specific command types */
+struct CommandOps {
+    /** Read a sample from the command */
+    double (*read)(struct CommandInfo *info, void *priv);
 };
 
-/** Sensor operations to implement specific sensor types */
-struct SensorOps {
-    /** Read a sample from the sensor */
-    double (*read)(struct SensorInfo *info, void *priv);
-};
-
-/** Sensor structure */
-struct Sensor {
-    /** Sensor information */
-    struct SensorInfo info;
-    /** Sensor operations */
-    struct SensorOps *ops;
-    /** Sensor private data passed to ops */
+/** Command structure */
+struct Command {
+    /** Command information */
+    char *name;
+    /** Command operations */
+    struct CommandOps *ops;
+    /** Command private data passed to ops */
     void *priv;
 };
 
 /**
- * Creates a sensor
+ * Creates a command
  *
- * A sensor can be read according to a custom operation
+ * A command can be read according to a custom operation
  * and holds generic information about its name, type and
  * measurement unit.
  *
- * @param info Sensor information structure.
- * @param ops  Sensor operations.
- * @param priv Sensor private data.
+ * @param info Command information structure.
+ * @param ops  Command operations.
  *
- * @return Pointer to a sensor manager structure.
+ * @return Pointer to a command manager structure.
  */
-struct Sensor *sensor_create(struct SensorInfo *info,
-                             struct SensorOps *ops,
-                             void *priv);
+struct Command *command_create(char *name,
+                             struct CommandOps *ops);
 
 /**
- * Reads the sensor
+ * Reads the command
  *
- * @param ssr Sensor structure.
+ * @param cmd Command structure.
  *
- * @return Value representing the sensor measurement.
+ * @return Value representing the command measurement.
  */
-double sensor_read(struct Sensor *ssr);
+char* command_execute(struct Command *cmd, char *req_msg);
 
 /**
- * Destroys the sensor
+ * Destroys the command
  *
- * @param ssr Sensor structure.
+ * @param cmd Command structure.
  */
-void sensor_destroy(struct Sensor *ssr);
+void command_destroy(struct Command *cmd);
 
-#endif // SENSOR_H_
+#endif // COMMAND_H_

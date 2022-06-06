@@ -4,7 +4,7 @@
 
 #include "message.h"
 
-static char* command_status_execute(char *name, char *req_msg, char *resp_msg){
+static void command_status_execute(char *name, char *req_msg, char *resp_msg){
     cJSON *payload = cJSON_Parse(req_msg);
     status = cJSON_GetStringValue(payload)
     cJSON_DeleteItemFromObject(payload, "args1")

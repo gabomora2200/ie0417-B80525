@@ -1,43 +1,32 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include <stdlib.h>
 
-#include <eieDevice/external/uthash.h>
-#include <eieDevice/CommandManager/command_manager.h>
-/**
-Command manager structure declaration (not exposed)
-struct CommandManager {
-    struct CommandManagerConfig cfg;
-    cJSON *cfg_cjson;
-    struct CommandFactory *sf;
-};*/
+#include <eieDevice/CommandManager/command.h>
 
-static void execute(const char *name, void *priv, const char *req_msg, char *resp_msg){
-    cJSON *payload = cJSON_Parse(req_msg);
-
-    if (name == "message"){
-        cJSON *item = cJSON_CreateString("Hola");
-        cJSON_AddItemToObject(payload, "output", item);
-        cJSON_Delete(item);
+struct Command *command_create(char *name,
+                             struct CommandOps *ops)
+{
+    struct Command *cmd =
+        (struct Command *)calloc(1, sizeof(struct Command));
+    if (cmd == NULL) {
+        fprintf(stderr, "Failed to allocate command\n");
+        return NULL;
     }
-    if (name == "ping_pong"){}
+    cmd->name = *name;
+    cmd->ops = ops;
+    return cmd;
+}
 
-    if (name == "status"){  ///////Arreglar para sustituir keys/values
-
-        status = cJSON_GetStringValue(payload)
-        cJSON_DeleteItemFromObject(payload, "args1")
-        if (status == "carga"){
-            cJSON *item = cJSON_CreateString("50");
-            cJSON_ReplaceItemInObject(payload, "Output", item);
-        } else {
-            cJSON *item = cJSON_CreateString("Active");
-            cJSON_ReplaceItemInObject(payload, "Output", item);
-        }
-        
-        cJSON_Delete(item);
+char* command_execute(struct Command *cmd, char *req_msg)
+{
+    char* resp_msg = NULL;
+    if (cmd->ops && cmd->ops->read) {
+        cmd->ops->execute(cmd->name, req_msg, resp_msg);
     }
+    return resp_msg;
+}
 
-    resp_msg = cJSON_Print(payload);
-    cJSON_Delete(payload)
+void command_destroy(struct Command *cmd)
+{
+    free(cmd);
 }

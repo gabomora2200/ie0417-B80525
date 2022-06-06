@@ -4,7 +4,7 @@
 
 #include "message.h"
 
-static char* command_message_execute(char *name, char *req_msg, char *resp_msg){
+static void command_message_execute(char *name, char *req_msg, char *resp_msg){
   cJSON *payload = cJSON_Parse(req_msg);
    
   cJSON *item = cJSON_CreateString("Hola");

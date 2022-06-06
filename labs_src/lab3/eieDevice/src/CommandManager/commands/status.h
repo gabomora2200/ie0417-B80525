@@ -1,8 +1,8 @@
 #ifndef STATUS_H_
 #define STATUS_H_
 
-#include <eieDevice/CommandRunner/command.h>
+#include <eieDevice/CommandManager/command.h>
 
-struct Command* command_status_execute(const char *name);
+static void command_status_execute(const char *name, char *req_msg, char *resp_msg);
 
 #endif // STATUS_H_

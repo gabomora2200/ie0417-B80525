@@ -4,7 +4,7 @@
 
 #include "pingpong.h"
 
-static char* command_pingpong_execute(char *name, char *req_msg, char *resp_msg){
+static void command_pingpong_execute(char *name, char *req_msg, char *resp_msg){
     cJSON *payload = cJSON_Parse(req_msg);
     resp_msg = cJSON_Print(payload);
     cJSON_Delete(payload)

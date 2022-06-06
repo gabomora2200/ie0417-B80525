@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <eieDevice/external/uthash.h>
-#include "command_manager.h"
+#include "factory.h"
 
 typedef struct Command * (*command_create_fn)(const char *name);
 
@@ -27,8 +27,9 @@ struct CommandFactory {
 
 /** Global array with the supported command constructors info */
 static struct CommandCtorInfo ctors_info[] = {
-  {"message", temp_command_create},
-  {"ping_pong", level_command_create},
+  {"message", command_message_create},
+  {"ping_pong", command_pingpong_create},
+  {"status", command_status_create},
   {"", NULL},
 };
 
