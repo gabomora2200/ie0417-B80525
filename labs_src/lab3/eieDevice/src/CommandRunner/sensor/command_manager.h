@@ -3,8 +3,12 @@
 
 //#include <eieDevice/CommandRunner/command/command.h>
 
-struct command_info(const char *name, void *priv,
-                     void (*command_fn)(const char *name, void *priv, const char *req_msg, char *resp_msg));
+struct command_ops
+{
+    const char *name,
+    void *priv, 
+    void (*execute)(char *name, char *req_msg, char *resp_msg)
+};
 
 
 /**
