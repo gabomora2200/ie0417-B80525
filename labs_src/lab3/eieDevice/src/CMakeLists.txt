@@ -1,1 +1,1 @@
-ADD_LIB_DIRS(CommandRunner TransportServer)
+ADD_LIB_DIRS(CommandManager TransportServer)

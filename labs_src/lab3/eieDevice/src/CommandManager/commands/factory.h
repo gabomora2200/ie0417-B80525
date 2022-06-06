@@ -1,14 +1,8 @@
-#ifndef COMMANDMANAGER_H_
-#define COMMANDMANAGER_H_
+#ifndef FACTORY_H_
+#define FACTORY_H_
 
 //#include <eieDevice/CommandRunner/command/command.h>
 
-struct command_ops
-{
-    const char *name,
-    void *priv, 
-    void (*execute)(char *name, char *req_msg, char *resp_msg)
-};
 
 
 /**
@@ -33,7 +27,7 @@ struct CommandFactory *command_factory_create(void);
  * @return Pointer to a command factory structure.
  */
 struct Command *command_factory_command_create(struct CommandFactory *sf,
-                                            const char *type, const char *name);
+                                            const char *name);
 
 /**
  * Destroys the command factory

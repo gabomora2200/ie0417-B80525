@@ -1,8 +1,10 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#include <eieDevice/CommandRunner/command.h>
+#include <eieDevice/CommandManager/command.h>
 
-struct Command* command_message_execute(const char *name);
+// void command_message_execute(const char *name, char *req_msg, char *resp_msg);
+
+struct Command * command_message_create(const char *name);
 
 #endif // MESSAGE_H_
