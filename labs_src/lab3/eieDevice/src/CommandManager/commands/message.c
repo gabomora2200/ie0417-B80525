@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cjson/cJSON.h>
+#include <string.h>
 
 #include "message.h"
 
 static void command_message_execute(char *name, char *req_msg, char *resp_msg){
-  cJSON *payload = cJSON_Parse(req_msg);
-   
-  cJSON *item = cJSON_CreateString("Hola");
-  cJSON_AddItemToObject(payload, "output", item);
-  cJSON_Delete(item);
-   
-  resp_msg = cJSON_Print(payload);
-  cJSON_Delete(payload);
+  cJSON *hola = cJSON_CreateObject();
+  cJSON *test = NULL;
+  test = cJSON_CreateString("Hi!");
+  cJSON_AddItemToObject(hola, "output", test);
+  strcpy(resp_msg, cJSON_Print(hola));
+  cJSON_Delete(hola);
 }
 
 struct CommandOps command_message_ops = {

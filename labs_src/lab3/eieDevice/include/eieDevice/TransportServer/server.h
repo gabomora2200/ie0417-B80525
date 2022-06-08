@@ -3,7 +3,7 @@
 
 
 /* Includes
- * This is the list of includes need in transport_server
+ * This is the list of includes need in command
  */
 #include <stdio.h>
 #include <string.h>
@@ -13,6 +13,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <czmq.h>
+
+
+#include "eieDevice/CommandManager/command_manager.h"
 
 
 /**
@@ -31,21 +34,11 @@ struct cmd_request{
  */
 typedef struct cmd_final_request
 {
-    char cmd_name[100]; /*!< Command Name */ 
+    char * cmd_name; /*!< Command Name */ 
     uint32_t payload_size; /*!< Payload size */
     char * payload; /*!< Payload (Binary Buffer) */
 }cmd_final_request;
 
-
-
-
-struct rep_cmd_message{
-    uint32_t response;
-};
-
-struct rep_cmd_ping_pong{
-    
-};
 
 
 /* Server thread data */

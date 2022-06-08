@@ -21,14 +21,8 @@
 int main(int argc, char **argv) {
 
     int ret = 0;
-    
-    // struct Command *cmd = NULL;
     struct CommandManager *cmd_mgr = NULL;
-
     cmd_mgr = command_manager_create();
-
-
-
 
     if (cmd_mgr == NULL) {
         fprintf(stderr, "Failed to create command manager\n");
@@ -36,20 +30,14 @@ int main(int argc, char **argv) {
     }
 
     char *commands[3] = {"message", "status", "ping_pong"};
+    for (int i = 0; i<3 ; i++ ){
 
-    // for (int i = 0; i<3 ; i++ ){
-        // cmd = command_manager_command_get(cmd_mgr, commands[i]);
-        
-        // struct cmd_ptr *ptr = malloc(sizeof(struct cmd_ptrn *));
-        // ptr->cmd = cmd;
-
-        char req[] = {"{\"args1\":\"Hola\"}"};
+        char req[] = {"{\"args1\":\"carga\"}"};
         char *resp = malloc(sizeof(char *));
 
-        cmd_create_exec(cmd_mgr, commands[2], req, resp);
-        // cmd_exec_fn(ptr, req, resp);
+        cmd_create_exec(cmd_mgr, commands[i], req, resp);
         printf("\nResultado: %s\n", resp);
-    // }
+    }
 
 
     return ret;

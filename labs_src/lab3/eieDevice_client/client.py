@@ -4,7 +4,7 @@ import json
 
 from random import choice
 
-string_list = ["Hola", "Mundo", "Este", "MAE", "Pura Vida", "EIE", "Software"]
+string_list = ["Hola", "Mundo", "Este", "MAE", "EIE", "this"]
 commands = ["message", "ping_pong", "status"]
 
 """
@@ -15,16 +15,17 @@ return:
     * payload size
 """
 def create_payload(cmd):
-    if (cmd == "ping_pong"):
-        payload = {"arg"+str(i):choice(string_list) for i in range(1,3)}
-        
+    if(cmd == "ping_pong"):
+        payload = str({"arg"+str(i):choice(string_list) for i in range(1,6)}).replace("'", '"')
+        size = len(payload)
     elif(cmd == "status"):
-        payload = {"arg1":choice(["is_active", "carga"])}
-    elif(cmd == "message"):
-        payload = {}
-
-    return str(payload).replace("'", '"'), len(str(payload).replace("'", '"'))
-
+        payload = str({"arg1":choice(["is_active", "carga"])}).replace("'", '"')
+        size = len(payload)
+    else:
+        payload = "{}"
+        size = len(payload)
+    
+    return payload, size
 
 """
 Function: fill the command name with spaces 
@@ -39,7 +40,6 @@ def fill_char(cmd):
     
     return cmd
 
-
 """
 Main function
 """
@@ -49,7 +49,7 @@ def main():
     print("Connecting to server...")
     client = context.socket(zmq.REQ)
     with client.connect(f"tcp://localhost:{port}"):
-        for i in range(500):
+        for i in range(100):
             #send request
             # Assuming little-endian in C side
 
@@ -60,14 +60,13 @@ def main():
             print("Size: ", size)
             print("Payload: '", payload,"'")
              
-            req = struct.pack("<100sI" + str(size) + "s", fill_char(cmd).encode(), size, payload.encode())
+            req = struct.pack("<100sI" + str(size) + "s", fill_char(cmd).encode(), size+1, (payload+'\0').encode())
             client.send(req)
 
             # # Receive response
             rep = client.recv()
-            print("\nData Received: ", rep, "\n")
+            print("\nData Received: ", rep.decode(), "\n")
+            
            
-
-
 if __name__ == "__main__":
     main()

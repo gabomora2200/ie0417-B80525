@@ -30,7 +30,7 @@ static int command_ht_add(struct CommandManager *smgr, struct Command *cmd)
         fprintf(stderr, "Failed to allocate command hash entry\n");
         return -ENOMEM;
     }
-    printf("%s: command name=%s", __func__, cmd->name);
+    printf("%s: command name=%s\n", __func__, cmd->name);
     entry->cmd = cmd;
     HASH_ADD_KEYPTR(hh, smgr->command_ht, cmd->name, strlen(cmd->name), entry);
     return 0;
@@ -104,6 +104,7 @@ struct CommandManager *command_manager_create()
     return smgr;
 }
 
+/** Return the command struct*/
 struct Command *command_manager_command_get(struct CommandManager *smgr,
                                          const char *name)
 {
@@ -120,33 +121,15 @@ struct cmd_ptr {
     struct Command *cmd;
 };
 
-/** Command read command execute function */
-static void cmd_exec_fn(void *data, char *req_msg, char *resp_msg)
-{
-    struct cmd_ptr *cmd_data = data;
-    struct Command *cmd = cmd_data->cmd;
-    resp_msg = command_execute(cmd, req_msg);
-    //printf("Command read command: [%s]: %s: %f %s\n",
-    //       cmd->info.type, cmd->info.name, val, cmd->info.unit);
-    // return resp_msg;
-}
-
+/** Command execute function */
 void cmd_create_exec(
     struct CommandManager *smgr,
     const char *name,
     char *req_msg,
     char *resp_msg)
 {
-    struct cmd_ptr *cmd_data = malloc(sizeof(struct cmd_ptr));
-    if (cmd_data == NULL) {
-        fprintf(stderr, "Failed to allocate sensor read command data\n");
-        // return NULL;
-    }
     struct Command * cmd = command_manager_command_get(smgr, name);
-    // if (cmd == NULL) return NULL;
-    cmd_data->cmd = cmd;
-
-    cmd_exec_fn(cmd_data, req_msg, req_msg);
+    command_execute(cmd, req_msg, resp_msg);
 }
 
 
@@ -154,6 +137,5 @@ void command_manager_destroy(struct CommandManager *smgr)
 {
     command_ht_destroy(smgr);
     command_factory_destroy(smgr->sf);
-    //cjson_handle_destroy(smgr->cfg_cjson);
     free(smgr);
 }
