@@ -10,15 +10,16 @@ struct CommandOps
 
 
 /** Command structure */
-struct Command {
+struct Command
+{
     /** Command information */
     char *name;
     /** Command private data*/
     void *priv;
     /** Command operations */
     struct CommandOps *ops;
-
 };
+
 
 /**
  * Creates a command

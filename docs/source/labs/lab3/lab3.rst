@@ -1,33 +1,33 @@
 *************
-Laboratorio 2
+Laboratorio 3
 *************
 
 * Andrés Arias Campos - B80661
 * Erick Sancho Abarca - B77145
 * Gabriel Araya Mora - B80525
 
-Construcción del RPC:
-*********************
 
-Para el presente laboratorio, se utiliza una mezcla de CMake, CJson para crear la conexion entre el cliente y el servidor implementado en python. A esto se le conoce como un RPC (Remote Procedure Call), y es básicamente lo mismo que llamar una función en JavaScript o python, en donde se toma el nombre de una función y sus argumentos y se hace un llamado a la misma. 
+eieDevice:
+==========
 
-RPC es simplemente una colección de funciones públicas las cuales interactúan entre ellas con el fin de resolver un problema. 
+El eieDevice es un servidor cuyo objetivo principal es ejecutar comandos de un dispositivo. Para cumplir lo anterior, se implementa el servidor utilizando la librería ``ZMQ``. 
 
+Además se decidió utilizar una arquitectura de tipo RPC, con el fin de enviar las solicitudes de los comandos desde el cliente.
 
-Transport RPC:
-==============
+Cada instancia de ``eieDevice`` puede ser vista como un pequeño programa que corre en un servidor de ``ZMQ`` y el mismo responde a las solicitudes enviadas por el cliente. 
+
+Con el fin de empaquetar los datos del servidor se utiliza la norma ``JSON`` y para ello la librería para C, ``CJSON``.
 
 
 Commandos:
 ==========
 
+* ``Message``: Comando el cual devuelve un mensaje arbitrario y no recibe argumentos.   
+
+* ``Status``: Commando encargado de informar el estado actual del dispositivo en cuestión.
+
+* ``PingPong``: Commando que retorna todos los argumentos de entrada. 
 
 
-Manejo de los datos:
-====================
-
-
-Calidad de código:
-===================
 
 
