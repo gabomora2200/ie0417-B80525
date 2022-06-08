@@ -2,11 +2,6 @@
 #define COMMAND_H_
 
 /** Command operations to implement specific command types */
-// struct CommandOps {
-//     /** Read a sample from the command */
-//     double (*read)(char *name, char *req_msg, char *resp_msg);
-// };
-
 struct CommandOps
 {
     const char *name;
@@ -18,6 +13,8 @@ struct CommandOps
 struct Command {
     /** Command information */
     char *name;
+    /** Command private data*/
+    void *priv;
     /** Command operations */
     struct CommandOps *ops;
 
@@ -30,7 +27,7 @@ struct Command {
  * and holds generic information about its name, type and
  * measurement unit.
  *
- * @param info Command information structure.
+ * @param name Command name.
  * @param ops  Command operations.
  *
  * @return Pointer to a command manager structure.
@@ -42,10 +39,12 @@ struct Command *command_create(char *name,
  * Reads the command
  *
  * @param cmd Command structure.
+ * @param req_msg Request message
+ * @param resp_msg response message.
  *
  * @return Value representing the command measurement.
  */
-char* command_execute(struct Command *cmd, char *req_msg);
+void command_execute(struct Command *cmd, char *req_msg, char *resp_msg);
 
 /**
  * Destroys the command

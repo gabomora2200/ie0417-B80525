@@ -1,11 +1,17 @@
 #include "eieDevice/TransportServer/server.h"
-
 #include "string.h"
 
-
-
 void* server_fn(void *arg){
-    // int ret;
+
+    // Command Manager handler declaration
+    struct CommandManager *cmd_mgr = NULL;
+    cmd_mgr = command_manager_create();
+    if (cmd_mgr == NULL) {
+        fprintf(stderr, "Failed to create command manager\n");
+        return NULL;
+    }
+
+    // Server handler declaration
     struct server_data *rdata = arg;
     printf("Thread %ld started\n", rdata->tid);
 
@@ -16,7 +22,7 @@ void* server_fn(void *arg){
         int ret;
         zframe_t *req_frame, *rep_frame;
         struct cmd_request *req;
-        struct rep_cmd_message *rep;
+        // struct rep_cmd_message *rep;
 
         req_frame = zframe_recv(rdata->server);
         if (!req_frame) {
@@ -34,16 +40,16 @@ void* server_fn(void *arg){
 
         printf("comand: '%s'\n", final_req->cmd_name);
         printf("Payload size: %d\n", final_req->payload_size);
-        printf("Payload: '%s'\n\n", final_req->payload);
+        printf("Payload: '%s'\n", final_req->payload);
         
 
-       // Execute the command manager
+        // Execute the command manager
+        char *resp = malloc(sizeof(char)*final_req->payload_size*2);
 
+        cmd_create_exec(cmd_mgr, final_req->cmd_name, final_req->payload, resp);
+        printf("Resultado: %s\n\n", resp);
 
-        rep_frame = zframe_new(NULL, sizeof(struct rep_cmd_message));
-        rep = (struct rep_cmd_message *)zframe_data(rep_frame);
-
-        rep->response = req->payload_size;
+        rep_frame = zframe_new(resp, sizeof(char)*strlen(resp));
 
         // No longer need request frame
         zframe_destroy(&req_frame);
@@ -68,10 +74,14 @@ cmd_final_request * process_request(struct cmd_request *request){
     cmd_final_request *final_req = 
                 malloc(sizeof(char[100]) + sizeof(uint32_t) + sizeof(char *));
     
-    // final_req->cmd_name = *request->cmd_name;
-    strcpy(final_req->cmd_name, request->cmd_name);
-    final_req->payload_size = request->payload_size;
+    char *cmd_name_ptr = request->cmd_name;
 
+    while(*cmd_name_ptr == ' '){
+        cmd_name_ptr++;
+    }
+
+    final_req->cmd_name = cmd_name_ptr;
+    final_req->payload_size = request->payload_size;
     final_req->payload = &request->payload;
     
     // Precessing the payload data

@@ -4,11 +4,6 @@
 #include <cjson/cJSON.h>
 #include <eieDevice/CommandManager/command.h>
 
-// void cmd_exec_fn(void *data, char *req_msg, char *resp_msg);
-
-/** Command read command private data */
-
-
 
 /**
  * Creates a command manager
@@ -43,9 +38,11 @@ struct Command *command_manager_command_get(struct CommandManager *smgr,
  *
  * @return Pointer to a command structure.
  */
-struct Command *command_manager_read_cmd_create(
+void cmd_create_exec(
     struct CommandManager *smgr,
-    const char *name);
+    const char *name,
+    char *req_msg,
+    char *resp_msg);
 
 /**
  * Destroys a command manager
@@ -59,10 +56,6 @@ void command_manager_destroy(struct CommandManager *smgr);
 
 
 
-void cmd_create_exec(
-    struct CommandManager *smgr,
-    const char *name,
-    char *req_msg,
-    char *resp_msg);
+
 
 #endif // MANAGER_H_

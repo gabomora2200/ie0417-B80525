@@ -17,13 +17,11 @@ struct Command *command_create(char *name,
     return cmd;
 }
 
-char* command_execute(struct Command *cmd, char *req_msg)
+void command_execute(struct Command *cmd, char *req_msg, char *resp_msg)
 {
-    char *resp_msg = NULL;
     if (cmd->ops && cmd->ops->execute) {
         cmd->ops->execute(cmd->name, req_msg, resp_msg);
     }
-    return resp_msg;
 }
 
 void command_destroy(struct Command *cmd)
