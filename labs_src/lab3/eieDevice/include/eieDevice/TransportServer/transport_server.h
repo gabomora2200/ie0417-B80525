@@ -1,10 +1,7 @@
 #ifndef TRANSPORT_SERVER_H
 #define TRASNPORT_SERVER_H
 
-/**
- * @brief Transport Server main function 
- * 
- */
+/** Function to invoke transport server. */
 void transport_server(void);
 
 

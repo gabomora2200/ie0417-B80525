@@ -19,8 +19,13 @@
 
 
 /**
- * @brief This Struct is the command header, before processing
- * 
+ * Struct to request a command.
+ *
+ * @param cmd_name Command name.
+ * @param payload_size Command payload size.
+ * @param payload Data itself.
+ *
+ * @return Request a command
  */
 struct cmd_request{
     char cmd_name[100]; /*!< Command Name */ 
@@ -29,8 +34,13 @@ struct cmd_request{
 };
 
 /**
- * @brief This Struct is the command header, after processing
- * 
+ * Struct to request to final command.
+ *
+ * @param cmd_name Command name.
+ * @param payload_size Command payload size.
+ * @param payload Data itself.
+ *
+ * @return Request a command
  */
 typedef struct cmd_final_request
 {
@@ -48,19 +58,20 @@ struct server_data {
 };
 
 /**
- * @brief Server function, implements the logic for 
- * receive and response requests
+ * Function to request method from server 
  * 
- * @param arg 
+ * @param arg Pointer to server data
  * @return void* 
  */
 void* server_fn(void *);
 
 
 /**
- * @brief Process the request and return a struct pointer to the request data;
- * 
- * @return cmd_final_request* 
+ * Function to request final command.
+ *
+ * @param cmd_request Command request struct.
+ *
+ * @return Returns a Command
  */
 cmd_final_request * process_request(struct cmd_request *);
 
