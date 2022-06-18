@@ -20,6 +20,7 @@ class SensorAvgThreshAnalyzer(SensorAnalyzer):
                             threshold.
     :param func handle_fn: Strategy function to define trigger action.
     """
+
     def __init__(
             self,
             avg_thresh: float, max_samples: int = 10,
@@ -78,10 +79,10 @@ class SensorAvgThreshAnalyzer(SensorAnalyzer):
 
         # Make sure that strategies are set
         assert self.compare_fn is not None, (
-         "Threshold compare strategy is not set"
+            "Threshold compare strategy is not set"
         )
         assert self.handle_fn is not None, (
-         "Threshold handle strategy is not set"
+            "Threshold handle strategy is not set"
         )
 
         full = self._update_avg(value)
