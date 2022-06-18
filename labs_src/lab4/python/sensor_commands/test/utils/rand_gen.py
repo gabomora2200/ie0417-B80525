@@ -33,3 +33,12 @@ class RandomGenerator:
         :return: List of random values
         """
         return self.gen.sample(range(low, high + 1), num)
+
+    def get_rand_list_item(self, list):
+        """
+        Generates a random item choice from a given list
+
+        :param generator: random number generator
+        :return: random item
+        """
+        return self.gen.choice(list)
