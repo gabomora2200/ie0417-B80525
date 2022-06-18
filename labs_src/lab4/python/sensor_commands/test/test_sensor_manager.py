@@ -2,6 +2,7 @@ from pytest import fixture
 import logging
 from sensor_commands.sensor.manager import SensorManager
 from utils.rand_gen import RandomGenerator
+from mock_sensor import MockSensor
 
 
 class FixtureContext:
@@ -59,3 +60,14 @@ def test_sensor_manager_single_sensor_read_command(fixt_ctx, sensor_mgr):
     sensor_mgr.destroy_sensor(sensor_name)
     for i in sensor_mgr.get_sensors_info():
         assert i != sensor_name, "Could not Destroy sensor"
+
+
+def test_sensor_manager_mock_type_register_unregister(sensor_mgr):
+    sensor_mgr.register_sensor_type("mock", MockSensor)
+    sensor_name_list = sensor_mgr.get_supported_sensor_types()
+    print(sensor_name_list)
+    assert "mock" in sensor_name_list, "mock is not a sensor type"
+    sensor_mgr.unregister_sensor_type("mock")
+    sensor_name_list = sensor_mgr.get_supported_sensor_types()
+    print(sensor_name_list)
+    assert "mock" not in sensor_name_list, "mock is still a sensor type"
