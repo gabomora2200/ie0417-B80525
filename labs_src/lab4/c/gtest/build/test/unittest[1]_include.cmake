@@ -1,5 +1,0 @@
-if(EXISTS "/home/ashborn/ie0417-B80525/labs_src/lab4/c/gtest/build/test/unittest[1]_tests.cmake")
-  include("/home/ashborn/ie0417-B80525/labs_src/lab4/c/gtest/build/test/unittest[1]_tests.cmake")
-else()
-  add_test(unittest_NOT_BUILT unittest_NOT_BUILT)
-endif()

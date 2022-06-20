@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(gtest-demo C CXX)
-#[[
+
 if (NOT LIB_NAME)
   set (LIB_NAME sensor_commands)
 endif()
-]]
+
 
 # Set default build type to release
 if (NOT CMAKE_BUILD_TYPE)
@@ -19,6 +19,13 @@ include(tools/cmake/utils.cmake)
 include(CTest)
 
 # Dependencies
+pkg_check_modules(CJSON REQUIRED libcjson>=1.7.15)
+add_definitions(${CJSON_CFLAGS})
+link_directories(${CJSON_LIBRARY_DIRS})
+include_directories(${CJSON_INCLUDE_DIRS})
+
+
+
 
 # Build flags
 set(C_WARNINGS "-Wall -Wstrict-prototypes -Wshadow -Werror")
@@ -27,12 +34,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 ${C_WARNINGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 ${CXX_WARNINGS}")
 
 
-#[[ Library to test (sensor_commands)
+# Library to test (sensor_commands)
 ADD_LIB_DIRS(src)
 add_library(${LIB_NAME} SHARED ${LIB_SOURCES})
-target_link_libraries(${LIB_NAME} pthread atomic)
+target_link_libraries(${LIB_NAME} pthread atomic ${CJSON_LIBRARIES})
 include_directories(${CMAKE_SOURCE_DIR}/include)
-]]
+
 
 # Testing
 add_subdirectory(test EXCLUDE_FROM_ALL)
