@@ -1,1 +1,0 @@
-/usr/bin/c++  -std=gnu++11 -Wall -Wshadow -Werror -O3 -DNDEBUG CMakeFiles/unittest.dir/unittest_main.cpp.o CMakeFiles/unittest.dir/tests/command_runner_fixture.cpp.o -o unittest  ../lib/libgtest.a testutil/libtestutil.a -lpthread 
