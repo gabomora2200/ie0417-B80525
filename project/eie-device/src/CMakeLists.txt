@@ -1,0 +1,1 @@
+# ADD_LIB_DIRS(CommandManager)
