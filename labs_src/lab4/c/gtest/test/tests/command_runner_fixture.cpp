@@ -27,11 +27,9 @@ class command_runner_fixture : public testing::Test
     virtual void SetUp() {
         std::cout << "Test fixture SetUp! "<< std::endl;
         srand(rng.get_seed());
-        int seed_test = rand() % 999 + 1;
         cmd_runner_cfg = {
-            .q_max_size = (seed_test),
+            .q_max_size = (rand() % 999 + 1),
         };
-        std::cout << "Q_max_size value: "<< seed_test << std::endl;
         cmd_runner = command_runner_create(&cmd_runner_cfg);
         /* NOTE: Both the constructor and SetUp methods are called for each test.
          * Check Googletest FAQ for more details on when to use each one:

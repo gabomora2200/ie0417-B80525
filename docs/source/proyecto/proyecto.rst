@@ -56,6 +56,7 @@ Requerimientos Funcionales eie-device:
 * ``eieDev-REQ-004`` Ser capaz de registrar funciones que respondan a callbacks.
 
 
+
 Requerimientos Funcionales eie-manager-config:
 ==============================================
 
