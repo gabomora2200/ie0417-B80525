@@ -81,23 +81,26 @@ Diagramas
 * Diagrama de secuencia para el primer escenario:
 
 .. uml::
-    client -> Ditto: Modifica la propiedad configuration
-    Ditto -> MQTT_broker: Envío de la propiedad mediante evento
-    MQTT_broker -> eie_device: Realiza el callback con el configuration
-    eie_device -> eie_device: Realiza un callback de la propiedad configuration
+
+  client -> Ditto: Modifica la propiedad configuration
+  Ditto -> MQTT_broker: Envío de la propiedad mediante evento
+  MQTT_broker -> eie_device: Realiza el callback con el configuration
+  eie_device -> eie_device: Realiza un callback de la propiedad configuration
 
 * Diagrama de secuencia para el segundo escenario:
 
 .. uml::
-    eie_device -> MQTT_broker: Publica una actualización de status
-    MQTT_broker -> Ditto: Actualización del Twin con el nuevo status
+
+  eie_device -> MQTT_broker: Publica una actualización de status
+  MQTT_broker -> Ditto: Actualización del Twin con el nuevo status
 
 * Diagrama de secuencia para el tercer escenario:
 
 .. uml::
-    eie_device -> MQTT_broker: Publica la configuración del Thing/device
-    MQTT_broker -> eie_manager_config: Toma la configuracion del evento y la guarda
-    eie_manager_config -> MQTT_broker: Le asigna un ID único al device por evento
-    eie_manager_config -> Ditto: Crea un digital twin para el device
-    MQTT_broker -> eie_device: Realiza un callback con el ID del device
-    eie_device -> eie_device: Toma el callback para actualizar la configuración
+    
+  eie_device -> MQTT_broker: Publica la configuración del Thing/device
+  MQTT_broker -> eie_manager_config: Toma la configuracion del evento y la guarda
+  eie_manager_config -> MQTT_broker: Le asigna un ID único al device por evento
+  eie_manager_config -> Ditto: Crea un digital twin para el device
+  MQTT_broker -> eie_device: Realiza un callback con el ID del device
+  eie_device -> eie_device: Toma el callback para actualizar la configuración
