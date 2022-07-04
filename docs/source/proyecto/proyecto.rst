@@ -51,14 +51,53 @@ Requerimientos Funcionales eie-device:
 ======================================
 
 * ``eieDev-REQ-001`` Cada uno de los dispositivos deben ser capaces de inicializarse a sí mismos, por medio de un archivo de configuración, o bien por medio de un `request` del ``eie-Manager-Config`` con su respectiva configuración.
-* ``eieDev-REQ-002`` En caso de que el dispositivo de inicialize a sí mismo, el dispositivo debe publicar su respectiva configuración al ``eie-Manager-Config`` y luego recibir su respectivo ``UID``. 
+* ``eieDev-REQ-002`` Al inicializarse cada dispositivo, este debe publicar su respectiva configuración al ``eie-Manager-Config`` y luego recibir su respectivo ``UID``. 
 * ``eieDev-REQ-003`` La biblioteca debe ser capaz de abstraer el manejo del protocolo ``Ditto``, el protocolo ``MQTT``, y el handling del ``CJSON``.
-* ``eieDev-REQ-004`` Ser capaz de manejar una tabla Hash con los respectivos callbacks que se van a realizar.
+* ``eieDev-REQ-004`` Ser capaz de registrar funciones que respondan a callbacks.
+
 
 
 Requerimientos Funcionales eie-manager-config:
 ==============================================
 
-* ``eieMC-REQ-001`` Administración del Twin de ``Ditto`` y la configuración del ``eieDevice``. 
+* ``eieMC-REQ-001`` Administración del `Twin` de ``Ditto`` y la configuración del ``eieDevice``. 
 * ``eieMC-REQ-002`` Ser capaz de enviar y recibir ( publicación/suscripción ) mensajes en el administrador de ``MQTT``.
-* ``eieMC-REQ-003`` Hacer un `broadcast` de la configuración, cuando el cliente vaya a actualizar un `feature`.   
+* ``eieMC-REQ-003`` Registrar el dispositivo a partir de un archivo de configuración empleando el ``Device Discovery``.
+* ``eieMC-REQ-004`` Asignar un ``UID`` a cada nuevo dispositivo que se inicialice.
+
+
+Diseño de API
+**************
+
+* Create_device: Esta función recibe la configuración y su `UID` por parte del ``eie-Manager-Config``, y se crea una estructura ``Thing``. Esta función sirve para inicizalizar el dispositivo desde el cliente.
+* Destroy_device: Se desregistrar la estructura ``Thing`` y el dispositivo como tal, este debe enviar una notificación a ``Ditto`` y el ``eie-Mmanager-Config`` para borrar el `Twin` y su configuración del sistema. Esta función no parámetros, simplemente se ejecuta.
+* Modify_config: Esta se utiliza para añadir, eliminar o actualizar la propiedad `configuration` en el feature del `Twin`.
+* Register_callback: Este recibe el puntero a una función (callback) y el `feature` al cual esta ligado dicha función.
+* Update_feature: Esta función recibe el nombre del `feature` y su dato respectivo, para luego ser enviado a ``Ditto`` mediante una publicación por ``MQTT`` y este actualizar el `Twin`.
+
+Diagramas
+**********
+
+* Diagrama de secuencia para el primer escenario:
+
+.. uml::
+    client -> Ditto: Modifica la propiedad configuration
+    Ditto -> MQTT_broker: Envío de la propiedad mediante evento
+    MQTT_broker -> eie_device: Realiza el callback con el configuration
+    eie_device -> eie_device: Realiza un callback de la propiedad configuration
+
+* Diagrama de secuencia para el segundo escenario:
+
+.. uml::
+    eie_device -> MQTT_broker: Publica una actualización de status
+    MQTT_broker -> Ditto: Actualización del Twin con el nuevo status
+
+* Diagrama de secuencia para el tercer escenario:
+
+.. uml::
+    eie_device -> MQTT_broker: Publica la configuración del Thing/device
+    MQTT_broker -> eie_manager_config: Toma la configuracion del evento y la guarda
+    eie_manager_config -> MQTT_broker: Le asigna un ID único al device por evento
+    eie_manager_config -> Ditto: Crea un digital twin para el device
+    MQTT_broker -> eie_device: Realiza un callback con el ID del device
+    eie_device -> eie_device: Toma el callback para actualizar la configuración
