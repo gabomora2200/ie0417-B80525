@@ -9,4 +9,3 @@ Estos son los reportes de los laboratorios del curso.
    lab1/lab1
    lab2/lab2
    lab3/lab3
-   proyecto/proyecto

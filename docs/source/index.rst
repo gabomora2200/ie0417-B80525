@@ -17,11 +17,12 @@ funcional de múltiples tecnologías:
 - Un sistema de Integración Continua basado en GitHub
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contenidos
 
    getting-started
    labs/labs
+   proyecto/proyecto
 
 
 Indices y tablas
