@@ -40,6 +40,10 @@ Después de una reunión con los ejecutivos de alto rango de eieLabs, se llamó 
 
 Con base en lo hablado en esta reunión, los ejecutivos de eieLabs aprueban todo lo necesario para que el departamento de ``R&D``, haga un prototipo de ``eieManager 2.0``, el cual sea una mejora del modelo anterior, además de contener una nueva arquitectura que permita cubrir las necesidades de los inversionistas y así hacer crecer el negocio.
 
+El patrón de diseño `broker` sirve para estas necesidades ya que el mismo cuenta como un componente encargado de coordinar la comunicación entre dos componentes. El `broker` se encarga de enviar las solicitudes del cliente a su respectivo `device`, además de ayudar a transmitir los resultados de dichas solicitudes y errores que aparezcan.
+
+De esta forma es que se puede inicializar por medio del `broker` los diferentes dispositivos a partir de las señales enviadas por el ``eie-Manager-config``. De igual manera, si el dispositivo se inicializa solo, el ``broker`` debe recibir las señales enviadas para así publicar su configuración al manager config.
+
 Requerimientos
 **************
 
