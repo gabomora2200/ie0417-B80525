@@ -1,4 +1,4 @@
-#include <eie-device/version.h>
+#include <eie_device/version.h>
 
 static const char * LIB_VERSION = "@VERSION@";
 
