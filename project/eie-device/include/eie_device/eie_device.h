@@ -7,25 +7,23 @@
 /*****************************/
 /*     Structs and enums     */
 /*****************************/
-/**
- * @brief This structure contain the basic data of the thing 
- * 
- */
-typedef struct {
-    int thing_id;
-    char * namespace;
-} device;
 
 /**
  * @brief 
  * 
  */
-typedef struct
-{
-    char * feature_id;
-    void * clbk_fn;
-} feature_clbk;
+typedef void(*eie_callback_execute_t)(void *payload, int payloadlen);
 
+/**
+ * @brief This structure contain the basic data of the thing 
+ * 
+ */
+struct device;
+
+typedef enum {
+    OK, 
+    ERROR
+} eie_status;
 
 /*****************************/
 /*         Functions         */
@@ -38,41 +36,43 @@ typedef struct
  * @param namespace type of device
  * @return device* 
  */
-device * create_device(char *cfg_json, char * namespace);
+struct device * eie_device_create(char *cfg_json, char * namespace);
 
-
-/**
- * @brief Destroy Device "object"
- * 
- * @param dev  Device object
- * @return int Fail or pass
- */
-int destroy_device(device *dev);
 
 /**
  * @brief 
  * 
- * @param clbk_fn 
- * @param feature_id 
- * @return int 
+ * @param dev 
+ * @return eie_status 
  */
-int register_callback(feature_clbk * clbk);
+eie_status eie_device_destroy(struct device *dev);
 
 /**
- * @brief update a feature
+ * @brief 
  * 
+ * @param dev 
+ * @param clbk 
+ * @return eie_status 
+ */
+eie_status eie_device_register_callback(struct device * dev, char * feature_id, eie_callback_execute_t clbk_fn);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
  * @param feature_id 
  * @param data 
- * @return int 
+ * @return eie_status 
  */
-int update_feature(char * feature_id, char * data);
+eie_status eie_device_update_feature(struct device * dev, char * feature_id, char * data);
 
 /**
- * @brief Add or delete a feature
+ * @brief 
  * 
+ * @param dev 
  * @param feature_id 
- * @return int 
+ * @return eie_status 
  */
-int modify_config(char * feature_id);
+eie_status eie_device_modify_config(struct device * dev, char * feature_id);
 
 #endif //EIE_DEVICE_H
