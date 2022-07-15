@@ -10,7 +10,7 @@ struct device{
 
 
 // Create device definition 
-struct device * eie_device_create(char *cfg_json,  char * namespace){
+struct device *eie_device_create(char *cfg_json){
     struct device * dev = malloc(sizeof(struct device));
     
     /** Creat the callback manager */
