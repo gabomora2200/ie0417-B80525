@@ -17,6 +17,7 @@ message(STATUS "Current build type: ${CMAKE_BUILD_TYPE}")
 # Include rules
 include(FindPkgConfig)
 include(utils.cmake)
+include(CTest)
 
 # Build flags
 set(C_WARNINGS "-Wall -Wstrict-prototypes -Wshadow -Werror")
@@ -62,6 +63,10 @@ set(CONFIG_DIR ${CMAKE_SOURCE_DIR}/config)
 
 include_directories(${INCLUDE_DIR})
 
+# Testing
+add_subdirectory(test EXCLUDE_FROM_ALL)
+
+# Installation
 install(
   DIRECTORY ${INCLUDE_DIR}/${LIB_NAME}
   DESTINATION include

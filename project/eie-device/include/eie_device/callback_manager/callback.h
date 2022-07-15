@@ -1,6 +1,11 @@
 #ifndef CALLBACK_H
 #define CALLBACK_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 
 #include "eie_device/eie_device.h"
 
@@ -31,4 +36,7 @@ callback * callback_create(char *feature_id,  eie_callback_execute_t clbk_fn);
  */
 void callback_destroy(callback * clbk);
 
+#ifdef __cplusplus
+}
+#endif
 #endif //CALLBACK_H
