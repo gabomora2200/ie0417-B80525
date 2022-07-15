@@ -1,6 +1,10 @@
 #ifndef EIE_DEVICE_H
 #define EIE_DEVICE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -36,7 +40,7 @@ typedef enum {
  * @param namespace type of device
  * @return device* 
  */
-struct device * eie_device_create(char *cfg_json, char * namespace);
+struct device *eie_device_create(char *cfg_json);
 
 
 /**
@@ -74,5 +78,10 @@ eie_status eie_device_update_feature(struct device * dev, char * feature_id, cha
  * @return eie_status 
  */
 eie_status eie_device_modify_config(struct device * dev, char * feature_id);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif //EIE_DEVICE_H

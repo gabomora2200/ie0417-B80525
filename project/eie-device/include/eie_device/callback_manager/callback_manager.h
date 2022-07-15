@@ -1,6 +1,11 @@
 #ifndef CALLBACK_MANAGER_H
 #define CALLBACK_MANAGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include "eie_device/eie_device.h"
 
 /** Callback manager structure declaration */
@@ -57,4 +62,7 @@ int callback_manager_delete_clbk_feature(callback_manager *clbk_mgr, char * feat
  */
 void callback_manager_destroy(callback_manager *clbk_mgr);
 
+#ifdef __cplusplus
+}
+#endif
 #endif //CALLBACK_MANAGER_H
