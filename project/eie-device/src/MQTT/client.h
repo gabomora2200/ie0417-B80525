@@ -34,9 +34,11 @@ void Setup();
 void TearDown();
 
 
-void MQTT_publish(char *topic, MQTTClient_message pubmsg)
+void MQTT_publish(char *topic, MQTTClient_message pubmsg);
 
-void MQTT_suscribe(char *topic)
+void MQTT_suscribe(char *topic);
+
+void MQTT_client();
 
 /**
  * @brief 

@@ -1,4 +1,5 @@
-import paho.mqtt.client as mqtt 
+import paho.mqtt.client as mqtt
+import time
 
 def on_connect(client, userdata, flags, rc):
     if rc==0:
@@ -28,12 +29,14 @@ def on_message(client, userdata, message):
     print("message qos=",message.qos)
     print("message retain flag=",message.retain)
 
+def MQTT_suscribe(topic: str):
+    client.subscribe(topic)
 
-broker_address="172.17.0.1:1883"
+broker_address="172.17.0.1"
 
 client = mqtt.Client("MQTT_conection") #create new instance
 
-client.connect(broker_address) #connect to broker
+client.connect(broker_address, port=1883) #connect to broker
 
 client.on_message = on_message
 client.on_connect = on_connect
@@ -43,3 +46,9 @@ client.on_disconnect = on_disconnect
 
 while (1):
     client.loop()
+
+    MQTT_suscribe("devices/send")
+
+    time.sleep(5)
+    
+    MQTT_publish("devices/send", "Hola mundo")
