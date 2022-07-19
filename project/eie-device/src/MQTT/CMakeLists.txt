@@ -1,3 +1,3 @@
 ADD_LIB_SOURCES(
-    client.c
+    mqtt_client.c
 )

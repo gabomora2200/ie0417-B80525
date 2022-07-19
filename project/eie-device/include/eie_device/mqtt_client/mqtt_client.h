@@ -2,6 +2,8 @@
 #define CLIENT_H
 
 #include "MQTTClient.h"
+#include <eie_device/eie_device.h>
+#include <eie_device/callback_manager/callback_manager.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -20,7 +22,7 @@
  * @param namespace type of device
  * @return device* 
  */
-void Setup();
+//void Setup();
 
 
 /**
@@ -30,15 +32,14 @@ void Setup();
  * @return eie_status 
  */
 
+MQTTClient *MQTT_client_create(callback_manager *clbk_mgr);
 
-void TearDown();
+void MQTT_client_destroy(MQTTClient* client);
 
+int MQTT_publish(MQTTClient* client, char *topic, char * mesaage);
 
-void MQTT_publish(char *topic, MQTTClient_message pubmsg);
+int MQTT_subscribe(MQTTClient* client, char *topic);
 
-void MQTT_suscribe(char *topic);
-
-void MQTT_client();
 
 /**
  * @brief 
