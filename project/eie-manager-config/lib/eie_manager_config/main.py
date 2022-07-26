@@ -7,6 +7,7 @@ from .utils.args import parse_args
 
 from .ditto.policies import set_policy
 from .ditto.connections import set_connection
+from .mqtt.client import mqtt_start
 
 
 def main(*args):
@@ -15,6 +16,7 @@ def main(*args):
         config_dir = my_args.config
     else:
         config_dir = args[0]
+
 
     """
     Lo primero que se debe hacer es configurar las politicas de acceso
@@ -32,6 +34,9 @@ def main(*args):
 
     print(print(set_connection(connection)))
 
+
+    mqtt_start()
+    
 
 if __name__ == "__main__":
     main(None)
