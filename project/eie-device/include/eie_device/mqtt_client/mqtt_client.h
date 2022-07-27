@@ -1,6 +1,10 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "MQTTClient.h"
 #include <eie_device/eie_device.h>
 #include <eie_device/callback_manager/callback_manager.h>
@@ -36,7 +40,7 @@ MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *t
 
 void MQTT_client_destroy(MQTTClient* client);
 
-int MQTT_publish(MQTTClient* client, char *topic, char * mesaage);
+int MQTT_publish(MQTTClient* client, char *topic, char *message);
 
 int MQTT_subscribe(MQTTClient* client, char *topic);
 
@@ -49,5 +53,9 @@ int MQTT_subscribe(MQTTClient* client, char *topic);
  * @return eie_status 
  *
 eie_status eie_device_modify_config(struct device * dev, char * feature_id);*/
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //EIE_DEVICE_H

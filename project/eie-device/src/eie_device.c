@@ -49,8 +49,9 @@ struct device *eie_device_create(char *cfg_json){
     //MQTT_publish(dev->mqtt_client, tp_dev_dis_req, parsed_cfg_json);
 
     //sleep(2);
-    printf("thing_id: %s\n", dev->thing_id);
+    //printf("thing_id: %s\n", dev->thing_id);
     strcpy(dev->thing_id, "sensor:0");
+    strcpy(dev->policy, "my.test:policy");
 
     // while(1){
     //     sleep(5); 
@@ -91,7 +92,8 @@ eie_status eie_device_update_feature(struct device * dev, char * feature_id, cha
     char topic[100];
     strcpy(topic, "eie-manager/");
     strcat(topic, dev->thing_id);
-    
+    printf("Este es el topic: %s\n",topic);
+
     char* payload;
     payload = update_feature_parser(dev->thing_id, dev->policy, feature_id, data);
     //ret = MQTT_publish(dev->mqtt_client, "eie-manager/sensor:0", "{\"topic\":\"/sensor/0/things/twin/commands/modify\",\"path\":\"/features/ft_1/properties/status\",\"value\":{\"value\":9}}");
