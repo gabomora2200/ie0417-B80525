@@ -10,15 +10,25 @@
 char *update_feature_parser(char *thing_id, char *policy, char *feature_id, char *data){
 
     cJSON *json = cJSON_CreateObject();
+    char str[100];
+    strcpy(str, thing_id);
+    char* tmp = str;
 
-    char *topic = (char *)malloc((strlen(policy) + strlen(thing_id) + 40));
+    char *topic = (char *)malloc((strlen(policy) + strlen(thing_id) + 1000));
 
-    strcpy(topic, policy);
-    strcat(topic, "/");
-    strcat(topic, thing_id);
+    //strcpy(topic, policy);
+    for(int i = 0; i <= strlen(str); i++)
+    {
+        if(*tmp == ':')  
+        {
+            *tmp = '/';
+        }
+        tmp++;
+    }
+    strcat(topic, str);
     strcat(topic, "/things/twin/commands/modify");
 
-    char *path = (char *)malloc(strlen(feature_id) + 30);
+    char *path = (char *)malloc(strlen(feature_id) + 1000);
 
     strcpy(path, "/features/");
     strcat(path, feature_id);
@@ -27,12 +37,11 @@ char *update_feature_parser(char *thing_id, char *policy, char *feature_id, char
     cJSON_AddStringToObject(json, "topic", topic);
     cJSON_AddStringToObject(json, "path", path);
     cJSON_AddStringToObject(json, "value", data);
-
-    char* string = malloc(sizeof(strlen(cJSON_Print(json))));
-    strcpy(string, cJSON_PrintUnformatted(json));
-
-    // cJSON_Delete(json);
-
+    
+    char* string = malloc(strlen(cJSON_Print(json)));
+    strcpy(string, cJSON_Print(json));
+    cJSON_Delete(json);
+    
     return string;
 }
 

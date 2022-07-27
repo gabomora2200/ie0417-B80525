@@ -117,7 +117,7 @@ MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *t
 
 void MQTT_client_destroy(MQTTClient* client){
     int disconnect = MQTTClient_disconnect(*client, 10000);
-    if (disconnect != MQTTCLIENT_DISCONNECTED){
+    if (disconnect != MQTTCLIENT_SUCCESS){
         printf("Client fail to disconnect\n");
     }
     MQTTClient_destroy(client);
@@ -125,6 +125,7 @@ void MQTT_client_destroy(MQTTClient* client){
 
 
 int MQTT_publish(MQTTClient* client, char *topic, char* message){
+    
     MQTTClient_deliveryToken token;
     MQTTClient_message pubmsg = MQTT_create_message(message);
     int status = MQTTClient_publishMessage(*client, topic, &pubmsg, &token);
@@ -133,6 +134,8 @@ int MQTT_publish(MQTTClient* client, char *topic, char* message){
         return 0;
     }
     int completion = MQTTClient_waitForCompletion(*client, token, TIMEOUT);
+    printf("TOPIC: %s\n", topic);
+    printf("MESSAGE: %s\n", message);
     if (completion != MQTTCLIENT_SUCCESS){
         printf("Message fail to complete\n");
         return 0;
