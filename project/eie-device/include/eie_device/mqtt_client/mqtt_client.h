@@ -32,7 +32,7 @@
  * @return eie_status 
  */
 
-MQTTClient *MQTT_client_create(callback_manager *clbk_mgr);
+MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *thing_id);
 
 void MQTT_client_destroy(MQTTClient* client);
 

@@ -16,7 +16,7 @@ extern "C" {
  * @brief 
  * 
  */
-typedef void(*eie_callback_execute_t)(void *payload, int payloadlen);
+typedef void(*eie_callback_execute_t)(char *payload, int payloadlen);
 
 /**
  * @brief This structure contain the basic data of the thing 

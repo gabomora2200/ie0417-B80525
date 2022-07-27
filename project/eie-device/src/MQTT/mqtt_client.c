@@ -1,5 +1,7 @@
 #include "MQTTClient.h"
 #include <eie_device/mqtt_client/mqtt_client.h>
+#include <eie_device/parser/parser.h>
+#include <eie_device/eie_device.h>
 #include <string.h>
 
 #define ADDRESS     "tcp://172.17.0.1:1883"
@@ -7,6 +9,15 @@
 #define QOS         1
 #define TIMEOUT     10000L
 #define STR_MAX_SIZE  1000
+
+typedef struct{
+    // correlation id ptr
+    char *correlation_id;
+    // callback manager
+    callback_manager *clbk_mgr;
+    // thing_id
+    void **thing_id;
+} context_s;
 
 
 static void conn_lost_cb(void *context, char *cause)
@@ -22,20 +33,47 @@ static void conn_lost_cb(void *context, char *cause)
 
 static int msg_arrived_cb(void *context, char *topicName, int topicLen, MQTTClient_message *message)
 {
+    context_s *ctx = (context_s *)context;
+
     char* payload;
-    printf("Message arrived\n");
-    printf("     topic: %s\n", topicName);
-    printf("   message: ");
+    char data[1000];
+    char thing_id[100];
+    char feature_id[100];
+
+    char corr_id[100]; 
+
     payload = (char *)message->payload;
-    for(int i=0; i < message->payloadlen; i++) {
-        putchar(*payload++);
+
+    // checking if callback is for device_descovery
+    if(strcmp(topicName, "eie-manager/config/device_discovery/response") == 0){
+        // Parsing payload:
+        payload_extract(payload, thing_id, corr_id);
+
+        if(strcmp(corr_id, ctx->correlation_id)){
+            strcpy((char *)(*(ctx->thing_id)), thing_id);
+        }
+        printf("thing_id from parser: %s\n", (char *)(*(ctx->thing_id)));
+        printf("topic name: %s\n", topicName);        
+
+        return MQTTCLIENT_SUCCESS;
     }
-    putchar('\n');
+
+    // // Parsing message
+    callback_resp_parser(payload, thing_id, feature_id, data);
+
+    // thing_id validation
+    if(strcmp((char *)(*(ctx->thing_id)), thing_id)){
+        return MQTTCLIENT_SUCCESS; //FIXME: return?
+    }
+
+    // // executing callback manager 
+    callback_manager_clbk_execute(ctx->clbk_mgr, feature_id, data, strlen(data));
+
+
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
 
     return MQTTCLIENT_SUCCESS;
-
 }
 
 static MQTTClient_message MQTT_create_message(char * message){
@@ -48,14 +86,22 @@ static MQTTClient_message MQTT_create_message(char * message){
 
 }
 
-MQTTClient *MQTT_client_create(callback_manager *clbk_mgr)
+MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *thing_id)
 {
+    context_s * ctx = (context_s *)malloc(sizeof(context_s *));
+
+    ctx->clbk_mgr = clbk_mgr;
+    ctx->correlation_id = (char *)malloc(strlen(cor_id));
+    strcpy(ctx->correlation_id, cor_id);
+    ctx->thing_id = &thing_id;
+
+    
     MQTTClient* client = (MQTTClient *)malloc(sizeof(MQTTClient));
     MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
     MQTTClient_create(client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
-    int callback = MQTTClient_setCallbacks(*client, NULL, conn_lost_cb, msg_arrived_cb, NULL);
+    int callback = MQTTClient_setCallbacks(*client, (void *)ctx, conn_lost_cb, msg_arrived_cb, NULL);
     if (callback != MQTTCLIENT_SUCCESS){
         printf("Message fail to hanled\n");
         return NULL;
@@ -81,7 +127,7 @@ void MQTT_client_destroy(MQTTClient* client){
 int MQTT_publish(MQTTClient* client, char *topic, char* message){
     MQTTClient_deliveryToken token;
     MQTTClient_message pubmsg = MQTT_create_message(message);
-    int status = MQTTClient_publishMessage(*client, "device/create", &pubmsg, &token);
+    int status = MQTTClient_publishMessage(*client, topic, &pubmsg, &token);
     if (status != MQTTCLIENT_SUCCESS){
         printf("Fail to publish message\n");
         return 0;

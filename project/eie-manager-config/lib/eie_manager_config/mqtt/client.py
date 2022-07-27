@@ -1,10 +1,12 @@
+from ..utils.device_discovery import device_discovery
 import paho.mqtt.client as mqtt
-import time
+import json
+
 
 def on_connect(client, userdata, flags, rc):
     if rc==0:
         client.connected_flag=True #set flag
-        client.subscribe('v1/devices/me/rpc/request/+')
+        client.subscribe('eie-manager/config/device_discovery/request')
         print("connected OK")
     else:
         print("Bad connection Returned code=",rc)
@@ -16,39 +18,42 @@ def on_disconnect(client, userdata, rc):
 def on_publish(client, userdata, mid):
     print("In on_pub callback mid= "  ,mid)
 
+def on_message(client, userdata, message):
+    # print("message received " ,str(message.payload.decode("utf-8")))
+    # print("message topic=",message.topic)
+    # print("message qos=",message.qos)
+    # print("message retain flag=",message.retain)
 
-def MQTT_publish(topic: str, payload: str):
+    resp = userdata.register(message.payload)
+
+    MQTT_publish(client, "eie-manager/config/device_discovery/response", resp)
+
+
+
+
+
+def MQTT_publish(client, topic: str, payload: str):
     try:
         client.publish(topic, payload)
     except:
         print("Error at publish message")
 
-def on_message(client, userdata, message):
-    print("message received " ,str(message.payload.decode("utf-8")))
-    print("message topic=",message.topic)
-    print("message qos=",message.qos)
-    print("message retain flag=",message.retain)
 
-def MQTT_suscribe(topic: str):
+def MQTT_suscribe(client, topic: str):
     client.subscribe(topic)
 
-broker_address="172.17.0.1"
 
-client = mqtt.Client("MQTT_conection") #create new instance
+def mqtt_start():
+    dev_disc_mgr = device_discovery()
 
-client.connect(broker_address, port=1883) #connect to broker
+    client = mqtt.Client("MQTT_conection") #create new instance
+    client.on_message = on_message
+    client.on_connect = on_connect
+    client.on_disconnect = on_disconnect
 
-client.on_message = on_message
-client.on_connect = on_connect
-client.on_disconnect = on_disconnect
+    client.user_data_set(dev_disc_mgr);
 
-
-
-while (1):
-    client.loop()
-
-    MQTT_suscribe("devices/send")
-
-    time.sleep(5)
     
-    MQTT_publish("devices/send", "Hola mundo")
+    client.connect("172.17.0.1", port=1883) #connect to broker    
+
+    client.loop_forever()
