@@ -13,25 +13,10 @@ void config_clbk1(char *payload, int payloadlen){
     printf("From config callback\nPayload is: %s\n", payload);
 }
 
-
-// void update_feature_10_t(struct device * dev, char *feature_id){
-//     time_t t;
-//     srand((unsigned) time(&t));
-//     for(int i = 0; i<10; i++){
-//         int x = rand();
-//         int length = snprintf( NULL, 0, "%d", x );
-//         char *value = malloc( length + 1 );
-//         snprintf( value, length + 1, "%d", x );
-
-//     }
-// }
-
-
 int main(int argc, char **argv) {
     eie_status ret = OK;
-    char cfg_json[] = "{\"namespace\":\"sensor\",\"features\":{\"ft_1\":{\"properties\":{\"configuration\":{\"ON\":true},\"status\":{\"value\":0}}}}}";
-    char data_update[] = "{\"value\":9}";
-
+    char cfg_json[] = "{\"namespace\":\"sensor\",\"features\":{\"ft_1\":{\"properties\":{\"configuration\":{\"ON\":true},\"status\":{\"value\":0}}},\"ft_2\":{\"properties\":{\"configuration\":{\"ON\":true},\"status\":{\"value\":0}}}}}";
+    // char data_update[] = "{\"value\":9}";
 
     struct device * dev = eie_device_create(cfg_json);
 
@@ -45,13 +30,52 @@ int main(int argc, char **argv) {
         printf("Error: impossible to register callback\n");
     }
 
-    // sleep(1);
+    ret = eie_device_register_callback(dev, "ft_2", clbkfn);
+    if(ret == ERROR){
+        printf("Error: impossible to register callback\n");
+    }
 
-    // ret = eie_device_update_feature(dev, "ft_1", data_update);
-    // if(ret == ERROR){
-    //     printf("Error: impossible to update feature\n");
-    // }
+    for(int i= 0; i<10; i++){
+        int x = rand();
+        int length = snprintf( NULL, 0, "%d", x );
+        char *value = (char *)malloc( length + 1 );
+        snprintf( value, length + 1, "%d", x );
 
+        char data_update_2[] = "{\"value\":";
+        char data_to_send[100];
+
+        strcpy(data_to_send, data_update_2);
+        strcat(data_to_send, value);
+        strcat(data_to_send, "}");
+
+        ret = eie_device_update_feature(dev, "ft_1", data_to_send);
+        if(ret == ERROR){
+            printf("Error: impossible to update feature\n");
+        }
+
+        sleep(5);
+
+        x = rand();
+        length = snprintf( NULL, 0, "%d", x );
+        value = (char *)malloc( length + 1 );
+        snprintf( value, length + 1, "%d", x );
+
+        char data_to_send_2[100];
+
+        strcpy(data_to_send_2, data_update_2);
+        strcat(data_to_send_2, value);
+        strcat(data_to_send_2, "}");
+
+        ret = eie_device_update_feature(dev, "ft_2", data_to_send_2);
+        if(ret == ERROR){
+            printf("Error: impossible to update feature\n");
+        }
+        
+        sleep(5);
+
+    }
+
+    
 
     ret = eie_device_destroy(dev);
     if(ret == ERROR){

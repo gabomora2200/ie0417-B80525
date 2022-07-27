@@ -6,7 +6,7 @@
 
 #define ADDRESS     "tcp://172.17.0.1:1883"
 #define CLIENTID    "eieDevice"
-#define QOS         1
+#define QOS         0
 #define TIMEOUT     10000L
 #define STR_MAX_SIZE  1000
 
@@ -16,7 +16,7 @@ typedef struct{
     // callback manager
     callback_manager *clbk_mgr;
     // thing_id
-    void **thing_id;
+    char *thing_id;
 } context_s;
 
 
@@ -26,10 +26,6 @@ static void conn_lost_cb(void *context, char *cause)
     printf("Cause: %s\n", cause);
 }
 
-/*static void msg_delivered_cb(void *context, MQTTClient_deliveryToken dt)
-{
-    printf("Message with token value %d delivery confirmed\n", dt);
-}*/
 
 static int msg_arrived_cb(void *context, char *topicName, int topicLen, MQTTClient_message *message)
 {
@@ -49,31 +45,25 @@ static int msg_arrived_cb(void *context, char *topicName, int topicLen, MQTTClie
         // Parsing payload:
         payload_extract(payload, thing_id, corr_id);
 
-        if(strcmp(corr_id, ctx->correlation_id)){
-            strcpy((char *)(*(ctx->thing_id)), thing_id);
-        }
-        printf("thing_id from parser: %s\n", (char *)(*(ctx->thing_id)));
-        printf("topic name: %s\n", topicName);        
+        if(strcmp(corr_id, ctx->correlation_id) == 0){
+            strcpy(ctx->thing_id, thing_id);
+        } 
+       
+        MQTTClient_freeMessage(&message);
+        MQTTClient_free(topicName);
+        return 1;
+    } else {
+        // Parsing message
+        callback_resp_parser(payload, thing_id, feature_id, data);
 
-        return MQTTCLIENT_SUCCESS;
+        // executing callback manager 
+        callback_manager_clbk_execute(ctx->clbk_mgr, feature_id, data, strlen(data));
     }
-
-    // // Parsing message
-    callback_resp_parser(payload, thing_id, feature_id, data);
-
-    // thing_id validation
-    if(strcmp((char *)(*(ctx->thing_id)), thing_id)){
-        return MQTTCLIENT_SUCCESS; //FIXME: return?
-    }
-
-    // // executing callback manager 
-    callback_manager_clbk_execute(ctx->clbk_mgr, feature_id, data, strlen(data));
-
 
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
 
-    return MQTTCLIENT_SUCCESS;
+    return 1;
 }
 
 static MQTTClient_message MQTT_create_message(char * message){
@@ -86,14 +76,15 @@ static MQTTClient_message MQTT_create_message(char * message){
 
 }
 
-MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *thing_id)
+MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, char *thing_id)
 {
-    context_s * ctx = (context_s *)malloc(sizeof(context_s *));
+    context_s * ctx = (context_s *)malloc(sizeof(context_s));
 
     ctx->clbk_mgr = clbk_mgr;
     ctx->correlation_id = (char *)malloc(strlen(cor_id));
     strcpy(ctx->correlation_id, cor_id);
-    ctx->thing_id = &thing_id;
+    
+    ctx->thing_id = thing_id;
 
     
     MQTTClient* client = (MQTTClient *)malloc(sizeof(MQTTClient));
@@ -125,7 +116,6 @@ void MQTT_client_destroy(MQTTClient* client){
 
 
 int MQTT_publish(MQTTClient* client, char *topic, char* message){
-    
     MQTTClient_deliveryToken token;
     MQTTClient_message pubmsg = MQTT_create_message(message);
     int status = MQTTClient_publishMessage(*client, topic, &pubmsg, &token);
@@ -134,8 +124,6 @@ int MQTT_publish(MQTTClient* client, char *topic, char* message){
         return 0;
     }
     int completion = MQTTClient_waitForCompletion(*client, token, TIMEOUT);
-    printf("TOPIC: %s\n", topic);
-    printf("MESSAGE: %s\n", message);
     if (completion != MQTTCLIENT_SUCCESS){
         printf("Message fail to complete\n");
         return 0;
@@ -153,37 +141,3 @@ int MQTT_subscribe(MQTTClient* client, char *topic){
     return 1;
 }
 
-
-
-/*
-MQTTClient *MQTT_client_create(){
-
-    //Setup();
-
-    MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
-    MQTTClient_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL);
-    conn_opts.keepAliveInterval = 20;
-    conn_opts.cleansession = 1;
-    int callback = MQTTClient_setCallbacks(client, NULL, conn_lost_cb, msg_arrived_cb, msg_delivered_cb);
-    int connection = MQTTClient_connect(client, &conn_opts);
-
-    int ret = 0;
-    
-    MQTTClient_message pubmsg = MQTTClient_message_initializer;
-
-    char msg[STR_MAX_SIZE];
-
-    ret = snprintf(msg, STR_MAX_SIZE, "Hello!: Num A: Num B:");
-
-    pubmsg.payload = msg;
-    pubmsg.payloadlen = strlen(msg);
-    pubmsg.qos = QOS;
-    pubmsg.retained = 0;
-
-    MQTT_suscribe("devices/create");
-
-    MQTT_publish("devices/send", pubmsg);
-
-    
-
-}*/

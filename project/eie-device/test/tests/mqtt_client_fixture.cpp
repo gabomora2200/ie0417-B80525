@@ -33,7 +33,9 @@ class mqtt_client_fixture : public testing::Test
         srand(rng.get_seed());
         clbk_mgr = callback_manager_create();
         ASSERT_NE(clbk_mgr, nullptr);
-        mqtt_client = MQTT_client_create(clbk_mgr, "123", (void*)("sensor:0"));
+        char corr_id[] = "1234";
+        char thing_id[] = "sensor:0";
+        mqtt_client = MQTT_client_create(clbk_mgr, corr_id, thing_id);
         ASSERT_NE(mqtt_client, nullptr);
     }
 

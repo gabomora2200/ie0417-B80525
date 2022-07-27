@@ -72,11 +72,3 @@ TEST_F(eie_device_fixture, eie_device_update_feature_test)
     ret = eie_device_update_feature(dev, ftID, data_update);
     ASSERT_EQ(ret, OK);
 }
-
-TEST_F(eie_device_fixture, eie_device_modify_config_test)
-{
-    eie_status ret; 
-    char ftID[] = "ft_1";
-    ret = eie_device_modify_config(dev, ftID);
-    ASSERT_EQ(ret, OK);
-}

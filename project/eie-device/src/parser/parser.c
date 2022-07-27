@@ -36,7 +36,7 @@ char *update_feature_parser(char *thing_id, char *policy, char *feature_id, char
 
     cJSON_AddStringToObject(json, "topic", topic);
     cJSON_AddStringToObject(json, "path", path);
-    cJSON_AddStringToObject(json, "value", data);
+    cJSON_AddRawToObject(json, "value", data);
     
     char* string = malloc(strlen(cJSON_Print(json)));
     strcpy(string, cJSON_Print(json));
@@ -56,9 +56,9 @@ void callback_resp_parser(char *payload, char *thing_id, char *feature_id, char 
     cJSON *thing = cJSON_GetObjectItemCaseSensitive(json, "topic");
     cJSON *feature = cJSON_GetObjectItemCaseSensitive(json, "path");
     cJSON *value = cJSON_GetObjectItemCaseSensitive(json, "value");
-    //thing_id = thing->valuestring;
-    //feature_id = feature->valuestring;
-    strcpy(data, value->valuestring);
+    
+    strcpy(data, cJSON_Print(value));
+
     char * token_1 = strtok(thing->valuestring, "/");
     for(int i = 0; i <= 2; i++) {
         if (i == 0){
@@ -79,11 +79,11 @@ void callback_resp_parser(char *payload, char *thing_id, char *feature_id, char 
 }
 
 //Agrega el correlation
-char *cfg_to_send(char *cfg_json, char *correlation_id, char *namespace){
+char *cfg_to_send(char *cfg_json, char *correlation_id, char *namespaces){
     cJSON *json = cJSON_Parse(cfg_json);
     cJSON *nmsp = cJSON_GetObjectItemCaseSensitive(json, "namespace");
 
-    strcpy(namespace, nmsp->valuestring);
+    strcpy(namespaces, nmsp->valuestring);
 
     cJSON_AddStringToObject(json, "correlation_id", correlation_id);
 
