@@ -55,7 +55,8 @@ eie_status eie_device_destroy(struct device *dev);
  * @brief 
  * 
  * @param dev 
- * @param clbk 
+ * @param feature_id 
+ * @param clbk_fn 
  * @return eie_status 
  */
 eie_status eie_device_register_callback(struct device * dev, char * feature_id, eie_callback_execute_t clbk_fn);
@@ -70,14 +71,6 @@ eie_status eie_device_register_callback(struct device * dev, char * feature_id, 
  */
 eie_status eie_device_update_feature(struct device * dev, char * feature_id, char * data);
 
-/**
- * @brief 
- * 
- * @param dev 
- * @param feature_id 
- * @return eie_status 
- */
-eie_status eie_device_modify_config(struct device * dev, char * feature_id);
 
 #ifdef __cplusplus
 }

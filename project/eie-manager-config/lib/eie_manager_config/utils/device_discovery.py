@@ -17,7 +17,7 @@ class device_discovery:
     def register(self, data: str):
         payload = json.loads(data)
         thing_id = self.gen_thing_id(payload["namespace"])
-        features = { 'features': payload['features']}
+        features = {'policyId': 'my.test:policy', 'features': payload['features']}
         add_thing(thing_id, json.dumps(features))
 
         resp = {"thing_id":thing_id, "correlation_id": payload["correlation_id"]}
