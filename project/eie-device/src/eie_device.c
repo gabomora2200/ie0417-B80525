@@ -13,6 +13,8 @@
 static char tp_dev_dis_rsp[] = "eie-manager/config/device_discovery/response";
 static char tp_dev_dis_req[] = "eie-manager/config/device_discovery/request";
 
+// char tp_thing[] = "eie-manager/sensor:0";
+
 struct device{
     char thing_id[100];
     char policy[100];
@@ -38,32 +40,37 @@ struct device *eie_device_create(char *cfg_json){
     char *parsed_cfg_json;
     parsed_cfg_json = cfg_to_send(cfg_json, correlation_id, dev->namespace);
 
-
     /** Creat the callback manager */
     dev->clkb_mgr = callback_manager_create();
-    dev->mqtt_client = MQTT_client_create(dev->clkb_mgr, correlation_id, (void *)dev->thing_id);
+    dev->mqtt_client = MQTT_client_create(dev->clkb_mgr, correlation_id, dev->thing_id);
 
-    // // Device discovery sequence
+    // Device discovery sequence
     MQTT_subscribe(dev->mqtt_client, tp_dev_dis_rsp);
 
-    //MQTT_publish(dev->mqtt_client, tp_dev_dis_req, parsed_cfg_json);
+    MQTT_publish(dev->mqtt_client, tp_dev_dis_req, parsed_cfg_json); 
 
-    //sleep(2);
-    //printf("thing_id: %s\n", dev->thing_id);
-    strcpy(dev->thing_id, "sensor:0");
-    strcpy(dev->policy, "my.test:policy");
+    
+    while(1){
+        sleep(2);
+        if(strlen(dev->thing_id) >= 1 ){
+            break;
+        }
+        else{
+            printf("THING_ID not found!\n");
+            MQTT_publish(dev->mqtt_client, tp_dev_dis_req, parsed_cfg_json);
+        }
+    }
 
-    // while(1){
-    //     sleep(5); 
+    printf("THING_ID: %s\n", dev->thing_id);
 
-    //     if(strcmp(dev->thing_id, "")) {
-    //         MQTT_publish(dev->mqtt_client, tp_dev_dis_req, cfg_json);
-    //         continue;
-    //     }
-    //     else {
-    //         break;
-    //     }
-    // }
+    char tp_device_ditto[100];
+
+    strcpy(tp_device_ditto, "eie-manager/");
+    strcat(tp_device_ditto, dev->thing_id);
+    
+    printf("Topic of Ditto: %s\n", tp_device_ditto);
+
+    MQTT_subscribe(dev->mqtt_client, tp_device_ditto);
 
     return dev;
 }
@@ -92,11 +99,10 @@ eie_status eie_device_update_feature(struct device * dev, char * feature_id, cha
     char topic[100];
     strcpy(topic, "eie-manager/");
     strcat(topic, dev->thing_id);
-    printf("Este es el topic: %s\n",topic);
+    strcat(topic, "/things/twin/commands/modify");
 
     char* payload;
     payload = update_feature_parser(dev->thing_id, dev->policy, feature_id, data);
-    //ret = MQTT_publish(dev->mqtt_client, "eie-manager/sensor:0", "{\"topic\":\"/sensor/0/things/twin/commands/modify\",\"path\":\"/features/ft_1/properties/status\",\"value\":{\"value\":9}}");
     ret = MQTT_publish(dev->mqtt_client, topic, payload);
     if(ret == 0){
         return ERROR;

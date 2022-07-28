@@ -12,47 +12,45 @@ extern "C" {
 #include <stdio.h>
 
 /*****************************/
-/*     Structs and enums     */
-/*****************************/
-
-/*****************************/
 /*         Functions         */
 /*****************************/
 
 /**
- * @brief Create a device object
+ * @brief 
  * 
- * @param cfg_json thing config structure in json format
- * @param namespace type of device
- * @return device* 
+ * @param clbk_mgr 
+ * @param cor_id 
+ * @param thing_id 
+ * @return MQTTClient* 
  */
-//void Setup();
-
+MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, char *thing_id);
 
 /**
  * @brief 
  * 
- * @param dev 
- * @return eie_status 
+ * @param client 
  */
-
-MQTTClient *MQTT_client_create(callback_manager *clbk_mgr, char *cor_id, void *thing_id);
-
 void MQTT_client_destroy(MQTTClient* client);
 
+/**
+ * @brief 
+ * 
+ * @param client 
+ * @param topic 
+ * @param message 
+ * @return int 
+ */
 int MQTT_publish(MQTTClient* client, char *topic, char *message);
-
-int MQTT_subscribe(MQTTClient* client, char *topic);
-
 
 /**
  * @brief 
  * 
- * @param dev 
- * @param feature_id 
- * @return eie_status 
- *
-eie_status eie_device_modify_config(struct device * dev, char * feature_id);*/
+ * @param client 
+ * @param topic 
+ * @return int 
+ */
+int MQTT_subscribe(MQTTClient* client, char *topic);
+
 
 #ifdef __cplusplus
 }
