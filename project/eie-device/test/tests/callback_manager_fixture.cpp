@@ -26,26 +26,20 @@ class callback_manager_fixture : public testing::Test
     callback_manager_fixture()
         : value(2), rng(rand())
     {
-        std::cout << "Test fixture constructor! "<< std::endl;
+        std::cout << "Call Back Manager Test fixture constructor! "<< std::endl;
         std::cout << "  RNG seed " << rng.get_seed() << std::endl;
     }
 
     virtual void SetUp() {
-        std::cout << "Test fixture SetUp! "<< std::endl;
+        std::cout << "Call Back Manager Test fixture SetUp! "<< std::endl;
         srand(rng.get_seed());
         clbk_mgr = callback_manager_create();
         ASSERT_NE(clbk_mgr, nullptr);
-        /* NOTE: Both the constructor and SetUp methods are called for each test.
-         * Check Googletest FAQ for more details on when to use each one:
-         * https://github.com/google/googletest/blob/main/docs/faq.md#should-i-use-the-constructordestructor-of-the-test-fixture-or-setupteardown-ctorvssetup */
     }
 
     virtual void TearDown() {
-        std::cout << "Test fixture TearDown! "<< std::endl;
+        std::cout << "Call Back Manager Test fixture TearDown! \n"<< std::endl;
         callback_manager_destroy(clbk_mgr);
-        /* NOTE: Both the destructor and TearDown methods are called for each test.
-         * Check Googletest FAQ for more details on when to use each one:
-         * https://github.com/google/googletest/blob/main/docs/faq.md#should-i-use-the-constructordestructor-of-the-test-fixture-or-setupteardown-ctorvssetup */
     }
 };
 

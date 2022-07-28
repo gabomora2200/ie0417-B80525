@@ -71,7 +71,6 @@ Diseño de API
 
 * Create_device: Esta función recibe la configuración y su `UID` por parte del ``eie-Manager-Config``, y se crea una estructura ``Thing``. Esta función sirve para inicizalizar el dispositivo desde el cliente.
 * Destroy_device: Se desregistrar la estructura ``Thing`` y el dispositivo como tal, este debe enviar una notificación a ``Ditto`` y el ``eie-Mmanager-Config`` para borrar el `Twin` y su configuración del sistema. Esta función no parámetros, simplemente se ejecuta.
-* Modify_config: Esta se utiliza para añadir, eliminar o actualizar la propiedad `configuration` en el feature del `Twin`.
 * Register_callback: Este recibe el puntero a una función (callback) y el `feature` al cual esta ligado dicha función.
 * Update_feature: Esta función recibe el nombre del `feature` y su dato respectivo, para luego ser enviado a ``Ditto`` mediante una publicación por ``MQTT`` y este actualizar el `Twin`.
 
